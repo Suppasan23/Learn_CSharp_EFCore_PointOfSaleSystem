@@ -1,0 +1,26 @@
+Main form Icons: 
+1. Papirus-Team-Papirus-Apps-Preferences-system-login.ico
+- https://iconarchive.com/show/papirus-apps-icons-by-papirus-team/preferences-system-login-icon.html
+
+2. User Management: https://iconarchive.com/show/business-icons-by-graphicloads/profile-icon.html
+
+3. Product Management: https://iconarchive.com/show/android-lollipop-icons-by-dtafalonso/Aptoide-icon.html
+
+4. Point Of Sale (POS): https://iconarchive.com/show/flat-finance-icons-by-graphicloads/statistics-market-icon.html
+
+5. Log-out: https://iconarchive.com/show/papirus-apps-icons-by-papirus-team/android-file-transfer-icon.html
+
+6. Exit app: https://iconarchive.com/show/crystal-clear-icons-by-everaldo/Action-exit-icon.html
+
+About form: https://iconarchive.com/show/oxygen-icons-by-oxygen-icons.org/Actions-help-about-icon.html
+
+Login form:
+- Apps preferences system login Icon: https://iconarchive.com/show/oxygen-icons-by-oxygen-icons.org/Apps-preferences-system-login-icon.html
+- Keys Icon: https://iconarchive.com/show/my-seven-icons-by-itzikgur/Keys-icon.html
+
+Produt Management form:
+1. Actions document preview archive Icon: https://iconarchive.com/show/oxygen-icons-by-oxygen-icons.org/Actions-document-preview-archive-icon.html
+2. Actions document new Icon: https://iconarchive.com/show/oxygen-icons-by-oxygen-icons.org/Actions-document-new-icon.html
+3. Actions games endturn Icon: https://iconarchive.com/show/oxygen-icons-by-oxygen-icons.org/Actions-games-endturn-icon.html
+4. Actions document close Icon: https://iconarchive.com/show/oxygen-icons-by-oxygen-icons.org/Actions-document-close-icon.html
+5. Actions games solve Icon: https://iconarchive.com/show/oxygen-icons-by-oxygen-icons.org/Actions-games-solve-icon.html
