@@ -19,9 +19,26 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             WindowState = FormWindowState.Maximized;
         }
 
+        private List<Form> openedForms = new List<Form>();
+
         private void openChildForms(Form f)
         {
+            // Check if the form is already open
+            foreach (Form showingForm in openedForms) 
+            { 
+                if (showingForm.GetType() == f.GetType()) 
+                {
+                    showingForm.Activate();
+                    return;
+                }
+            }
+
+            // Add the form to the list of opened forms
+            openedForms.Add(f);
+
+            // Set the form properties and show it
             f.MdiParent = this;
+            f.FormClosed += (sender, args) => openedForms.Remove(f);
             f.StartPosition = FormStartPosition.Manual;
             f.Left = 3;
             f.Top = 3;
