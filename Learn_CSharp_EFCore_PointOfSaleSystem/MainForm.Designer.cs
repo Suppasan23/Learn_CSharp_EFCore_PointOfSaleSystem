@@ -30,13 +30,13 @@
         {
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
-            aboutToolStripMenuItem = new ToolStripMenuItem();
-            aboutApplicationToolStripMenuItem = new ToolStripMenuItem();
             userManagementToolStripMenuItem = new ToolStripMenuItem();
             productManagementToolStripMenuItem = new ToolStripMenuItem();
             pointOfSaleSystemToolStripMenuItem = new ToolStripMenuItem();
             logoutToolStripMenuItem = new ToolStripMenuItem();
             exitToolStripMenuItem = new ToolStripMenuItem();
+            aboutToolStripMenuItem = new ToolStripMenuItem();
+            aboutApplicationToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             toolStrip1 = new ToolStrip();
@@ -71,6 +71,46 @@
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
             // 
+            // userManagementToolStripMenuItem
+            // 
+            userManagementToolStripMenuItem.Image = Properties.Resources.Graphicloads_Business_Profile_96;
+            userManagementToolStripMenuItem.Name = "userManagementToolStripMenuItem";
+            userManagementToolStripMenuItem.Size = new Size(190, 22);
+            userManagementToolStripMenuItem.Text = "User Management";
+            userManagementToolStripMenuItem.Click += userManagementToolStripMenuItem_Click;
+            // 
+            // productManagementToolStripMenuItem
+            // 
+            productManagementToolStripMenuItem.Image = Properties.Resources.Dtafalonso_Android_Lollipop_Aptoide_96;
+            productManagementToolStripMenuItem.Name = "productManagementToolStripMenuItem";
+            productManagementToolStripMenuItem.Size = new Size(190, 22);
+            productManagementToolStripMenuItem.Text = "Product Management";
+            productManagementToolStripMenuItem.Click += productManagementToolStripMenuItem_Click;
+            // 
+            // pointOfSaleSystemToolStripMenuItem
+            // 
+            pointOfSaleSystemToolStripMenuItem.Image = Properties.Resources.Graphicloads_Flat_Finance_Statistics_market_96;
+            pointOfSaleSystemToolStripMenuItem.Name = "pointOfSaleSystemToolStripMenuItem";
+            pointOfSaleSystemToolStripMenuItem.Size = new Size(190, 22);
+            pointOfSaleSystemToolStripMenuItem.Text = "Point Of Sale System";
+            pointOfSaleSystemToolStripMenuItem.Click += pointOfSaleSystemToolStripMenuItem_Click;
+            // 
+            // logoutToolStripMenuItem
+            // 
+            logoutToolStripMenuItem.Image = Properties.Resources.Papirus_Team_Papirus_Apps_Android_file_transfer_96;
+            logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
+            logoutToolStripMenuItem.Size = new Size(190, 22);
+            logoutToolStripMenuItem.Text = "Log-out";
+            logoutToolStripMenuItem.Click += logoutToolStripMenuItem_Click;
+            // 
+            // exitToolStripMenuItem
+            // 
+            exitToolStripMenuItem.Image = Properties.Resources.Everaldo_Crystal_Clear_Action_exit_96;
+            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            exitToolStripMenuItem.Size = new Size(190, 22);
+            exitToolStripMenuItem.Text = "Exit";
+            exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
+            // 
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutApplicationToolStripMenuItem });
@@ -82,43 +122,9 @@
             // 
             aboutApplicationToolStripMenuItem.Image = Properties.Resources.Oxygen_Icons_org_Oxygen_Actions_help_about_96;
             aboutApplicationToolStripMenuItem.Name = "aboutApplicationToolStripMenuItem";
-            aboutApplicationToolStripMenuItem.Size = new Size(180, 22);
+            aboutApplicationToolStripMenuItem.Size = new Size(171, 22);
             aboutApplicationToolStripMenuItem.Text = "About Application";
-            // 
-            // userManagementToolStripMenuItem
-            // 
-            userManagementToolStripMenuItem.Image = Properties.Resources.Graphicloads_Business_Profile_96;
-            userManagementToolStripMenuItem.Name = "userManagementToolStripMenuItem";
-            userManagementToolStripMenuItem.Size = new Size(190, 22);
-            userManagementToolStripMenuItem.Text = "User Management";
-            // 
-            // productManagementToolStripMenuItem
-            // 
-            productManagementToolStripMenuItem.Image = Properties.Resources.Dtafalonso_Android_Lollipop_Aptoide_96;
-            productManagementToolStripMenuItem.Name = "productManagementToolStripMenuItem";
-            productManagementToolStripMenuItem.Size = new Size(190, 22);
-            productManagementToolStripMenuItem.Text = "Product Management";
-            // 
-            // pointOfSaleSystemToolStripMenuItem
-            // 
-            pointOfSaleSystemToolStripMenuItem.Image = Properties.Resources.Graphicloads_Flat_Finance_Statistics_market_96;
-            pointOfSaleSystemToolStripMenuItem.Name = "pointOfSaleSystemToolStripMenuItem";
-            pointOfSaleSystemToolStripMenuItem.Size = new Size(190, 22);
-            pointOfSaleSystemToolStripMenuItem.Text = "Point Of Sale System";
-            // 
-            // logoutToolStripMenuItem
-            // 
-            logoutToolStripMenuItem.Image = Properties.Resources.Papirus_Team_Papirus_Apps_Android_file_transfer_96;
-            logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            logoutToolStripMenuItem.Size = new Size(190, 22);
-            logoutToolStripMenuItem.Text = "Log-out";
-            // 
-            // exitToolStripMenuItem
-            // 
-            exitToolStripMenuItem.Image = Properties.Resources.Everaldo_Crystal_Clear_Action_exit_96;
-            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(190, 22);
-            exitToolStripMenuItem.Text = "Exit";
+            aboutApplicationToolStripMenuItem.Click += aboutApplicationToolStripMenuItem_Click;
             // 
             // statusStrip1
             // 
@@ -159,6 +165,7 @@
             UserManagementToolStripButton.Size = new Size(135, 125);
             UserManagementToolStripButton.Text = "User Management";
             UserManagementToolStripButton.TextImageRelation = TextImageRelation.ImageAboveText;
+            UserManagementToolStripButton.Click += UserManagementToolStripButton_Click;
             // 
             // toolStripSeparator1
             // 
@@ -176,6 +183,7 @@
             ProductManagementToolStripButton.Size = new Size(135, 125);
             ProductManagementToolStripButton.Text = "Product Management";
             ProductManagementToolStripButton.TextImageRelation = TextImageRelation.ImageAboveText;
+            ProductManagementToolStripButton.Click += ProductManagementToolStripButton_Click;
             // 
             // toolStripSeparator2
             // 
@@ -193,6 +201,7 @@
             PointOfSaleToolStripButton.Size = new Size(135, 125);
             PointOfSaleToolStripButton.Text = "Point Of Sale";
             PointOfSaleToolStripButton.TextImageRelation = TextImageRelation.ImageAboveText;
+            PointOfSaleToolStripButton.Click += PointOfSaleToolStripButton_Click;
             // 
             // toolStripSeparator3
             // 
@@ -210,6 +219,7 @@
             LogoutToolStripButton.Size = new Size(135, 125);
             LogoutToolStripButton.Text = "Log Out";
             LogoutToolStripButton.TextImageRelation = TextImageRelation.ImageAboveText;
+            LogoutToolStripButton.Click += LogoutToolStripButton_Click;
             // 
             // toolStripSeparator4
             // 
@@ -227,6 +237,7 @@
             ExitToolStripButton.Size = new Size(135, 125);
             ExitToolStripButton.Text = "Exit";
             ExitToolStripButton.TextImageRelation = TextImageRelation.ImageAboveText;
+            ExitToolStripButton.Click += ExitToolStripButton_Click;
             // 
             // toolStripSeparator5
             // 
@@ -247,6 +258,7 @@
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Main Form";
+            Load += MainForm_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             statusStrip1.ResumeLayout(false);
