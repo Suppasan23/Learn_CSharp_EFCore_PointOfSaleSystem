@@ -1,0 +1,3 @@
+Scaffold-DbContext "Server=localhost;Database=Learn_CSharp_EFCore_PointOfSaleSystem_DB;User ID=sa;Password=root;TrustServerCertificate=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models\Db
+
+Scaffold-DbContext "Server=localhost;Database=Learn_CSharp_EFCore_PointOfSaleSystem_DB;User ID=sa;Password=root;TrustServerCertificate=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models\Db -force
