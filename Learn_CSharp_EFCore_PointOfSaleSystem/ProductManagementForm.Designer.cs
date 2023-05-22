@@ -199,6 +199,7 @@
             DataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DataGridView1.Size = new Size(1028, 512);
             DataGridView1.TabIndex = 3;
+            DataGridView1.CellClick += DataGridView1_CellClick;
             // 
             // ProductIDTextBox
             // 
