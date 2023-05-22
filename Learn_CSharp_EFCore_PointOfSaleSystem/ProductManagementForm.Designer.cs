@@ -391,6 +391,7 @@
             Controls.Add(panel1);
             Name = "ProductManagementForm";
             Text = "Product Management";
+            Load += ProductManagementForm_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);

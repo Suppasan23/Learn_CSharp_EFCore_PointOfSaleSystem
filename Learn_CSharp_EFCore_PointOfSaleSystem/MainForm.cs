@@ -15,7 +15,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         public MainForm()
         {
             InitializeComponent();
-            ControlBox = false;
+            ControlBox = true;
             WindowState = FormWindowState.Maximized;
         }
 
@@ -24,9 +24,9 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         private void openChildForms(Form f)
         {
             // Check if the form is already open
-            foreach (Form showingForm in openedForms) 
-            { 
-                if (showingForm.GetType() == f.GetType()) 
+            foreach (Form showingForm in openedForms)
+            {
+                if (showingForm.GetType() == f.GetType())
                 {
                     showingForm.Activate();
                     return;
@@ -99,8 +99,8 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         private void ProductManagementToolStripButton_Click(object sender, EventArgs e)
         {
             ProductManagementForm f = new ProductManagementForm();
-            f.MinimizeBox= false;
-            f.MaximizeBox= false;
+            f.MinimizeBox = false;
+            f.MaximizeBox = false;
             openChildForms(f);
         }
 
