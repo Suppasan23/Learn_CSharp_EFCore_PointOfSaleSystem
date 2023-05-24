@@ -31,8 +31,8 @@
             panel1 = new Panel();
             label1 = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
-            KeywordTextBox = new TextBox();
             SearchButton = new Button();
+            KeywordTextBox = new TextBox();
             AddNewButton = new Button();
             SaveButton = new Button();
             BeleteButton = new Button();
@@ -96,12 +96,12 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel1.Controls.Add(KeywordTextBox, 0, 0);
             tableLayoutPanel1.Controls.Add(SearchButton, 1, 0);
-            tableLayoutPanel1.Controls.Add(AddNewButton, 2, 0);
-            tableLayoutPanel1.Controls.Add(SaveButton, 3, 0);
-            tableLayoutPanel1.Controls.Add(BeleteButton, 4, 0);
-            tableLayoutPanel1.Controls.Add(RefreshButton, 5, 0);
+            tableLayoutPanel1.Controls.Add(KeywordTextBox, 0, 0);
+            tableLayoutPanel1.Controls.Add(AddNewButton, 3, 0);
+            tableLayoutPanel1.Controls.Add(SaveButton, 4, 0);
+            tableLayoutPanel1.Controls.Add(BeleteButton, 5, 0);
+            tableLayoutPanel1.Controls.Add(RefreshButton, 2, 0);
             tableLayoutPanel1.Dock = DockStyle.Top;
             tableLayoutPanel1.Location = new Point(0, 83);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -109,15 +109,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Size = new Size(1034, 40);
             tableLayoutPanel1.TabIndex = 1;
-            // 
-            // KeywordTextBox
-            // 
-            KeywordTextBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            KeywordTextBox.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            KeywordTextBox.Location = new Point(3, 3);
-            KeywordTextBox.Name = "KeywordTextBox";
-            KeywordTextBox.Size = new Size(494, 33);
-            KeywordTextBox.TabIndex = 0;
             // 
             // SearchButton
             // 
@@ -128,18 +119,31 @@
             SearchButton.Size = new Size(94, 34);
             SearchButton.TabIndex = 1;
             SearchButton.Text = "Search";
+            SearchButton.TextAlign = ContentAlignment.MiddleRight;
             SearchButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             SearchButton.UseVisualStyleBackColor = true;
-            SearchButton.UseWaitCursor = true;
+            SearchButton.Click += SearchButton_Click;
+            // 
+            // KeywordTextBox
+            // 
+            KeywordTextBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            KeywordTextBox.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            KeywordTextBox.Location = new Point(3, 3);
+            KeywordTextBox.Name = "KeywordTextBox";
+            KeywordTextBox.Size = new Size(494, 33);
+            KeywordTextBox.TabIndex = 0;
+            KeywordTextBox.TextChanged += KeywordTextBox_TextChanged;
+            KeywordTextBox.DoubleClick += KeywordTextBox_DoubleClick;
+            KeywordTextBox.KeyDown += KeywordTextBox_KeyDown;
             // 
             // AddNewButton
             // 
             AddNewButton.Dock = DockStyle.Fill;
             AddNewButton.Image = Properties.Resources.Oxygen_Icons_org_Oxygen_Actions_document_new_96_;
-            AddNewButton.Location = new Point(603, 3);
+            AddNewButton.Location = new Point(703, 3);
             AddNewButton.Name = "AddNewButton";
             AddNewButton.Size = new Size(94, 34);
-            AddNewButton.TabIndex = 2;
+            AddNewButton.TabIndex = 3;
             AddNewButton.Text = "Add New";
             AddNewButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             AddNewButton.UseVisualStyleBackColor = true;
@@ -148,10 +152,10 @@
             // 
             SaveButton.Dock = DockStyle.Fill;
             SaveButton.Image = Properties.Resources.Oxygen_Icons_org_Oxygen_Actions_games_endturn_96;
-            SaveButton.Location = new Point(703, 3);
+            SaveButton.Location = new Point(803, 3);
             SaveButton.Name = "SaveButton";
             SaveButton.Size = new Size(94, 34);
-            SaveButton.TabIndex = 3;
+            SaveButton.TabIndex = 4;
             SaveButton.Text = "Save";
             SaveButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             SaveButton.UseVisualStyleBackColor = true;
@@ -160,10 +164,10 @@
             // 
             BeleteButton.Dock = DockStyle.Fill;
             BeleteButton.Image = Properties.Resources.Oxygen_Icons_org_Oxygen_Actions_document_close_96;
-            BeleteButton.Location = new Point(803, 3);
+            BeleteButton.Location = new Point(903, 3);
             BeleteButton.Name = "BeleteButton";
             BeleteButton.Size = new Size(94, 34);
-            BeleteButton.TabIndex = 4;
+            BeleteButton.TabIndex = 5;
             BeleteButton.Text = "Belete";
             BeleteButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             BeleteButton.UseVisualStyleBackColor = true;
@@ -172,13 +176,14 @@
             // 
             RefreshButton.Dock = DockStyle.Fill;
             RefreshButton.Image = Properties.Resources.Oxygen_Icons_org_Oxygen_Actions_games_solve_96;
-            RefreshButton.Location = new Point(903, 3);
+            RefreshButton.Location = new Point(603, 3);
             RefreshButton.Name = "RefreshButton";
             RefreshButton.Size = new Size(94, 34);
-            RefreshButton.TabIndex = 5;
+            RefreshButton.TabIndex = 2;
             RefreshButton.Text = "Refresh";
             RefreshButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             RefreshButton.UseVisualStyleBackColor = true;
+            RefreshButton.Click += RefreshButton_Click;
             // 
             // statusStrip1
             // 
@@ -408,7 +413,6 @@
         private Label label1;
         private TableLayoutPanel tableLayoutPanel1;
         private TextBox KeywordTextBox;
-        private Button SearchButton;
         private Button AddNewButton;
         private Button SaveButton;
         private Button BeleteButton;
@@ -435,5 +439,6 @@
         private TextBox ReorderLevelTextBox;
         private Label label11;
         private TextBox UnitInStockTextBox;
+        private Button SearchButton;
     }
 }

@@ -27,16 +27,17 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             DataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font(DataGridView1.Font, FontStyle.Bold);
             DataGridView1.EnableHeadersVisualStyles = false;  // Disable visual styles for headers
             DataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.LightSteelBlue;
+            DataGridView1.ClearSelection();
         }
 
 
-        ////////////////////////////////////// Form Load ////////////////////////////////////////////////////////
+        ///////////////////////////////////////////// Form Load /////////////////////////////////////////////
         private void ProductManagementForm_Load(object sender, EventArgs e)
         {
             loadData("");
         }
 
-        ////////////////////////////////////// Load Data ////////////////////////////////////////////////////////
+        ///////////////////////////////////////////// Load Data /////////////////////////////////////////////
         private void loadData(string strKeyword)
         {
             var data = from i in db.Products
@@ -71,30 +72,76 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         }
 
 
-        ////////////////////////////////////// GataGridView Cell Click /////////////////////////////////////////
-        private int selectedID = 0; 
+        ///////////////////////////////////////////// GataGridView Cell Click /////////////////////////////////////////////
+        private int selectedID = 0;
         private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-
-            if(DataGridView1.SelectedRows.Count > 0) 
+            try
             {
-                selectedID = Convert.ToInt32(DataGridView1.SelectedRows[0].Cells[0].Value.ToString());
+                if (DataGridView1.SelectedRows.Count > 0)
+                {
+                    selectedID = Convert.ToInt32(DataGridView1.SelectedRows[0].Cells[0].Value);
 
-                DataGridViewRow row = DataGridView1.SelectedRows[0];
+                    DataGridViewRow row = DataGridView1.SelectedRows[0];
 
-                ProductIDTextBox.Text = row.Cells[0].Value.ToString();
-                BarcodeTextBox.Text = row.Cells[1].Value.ToString();
-                ProductNameTextBox.Text = row.Cells[2].Value.ToString();
-                CostPriceTextBox.Text = row.Cells[3].Value.ToString();
-                SellingPriceTextBox.Text = row.Cells[4].Value.ToString();
-                UnitInStockTextBox.Text = row.Cells[5].Value.ToString();
-                ReorderLevelTextBox.Text = row.Cells[6].Value.ToString();
-                CategoryNameTextBox.Text = row.Cells[7].Value.ToString();
-                UnitNameTextBox.Text = row.Cells[8].Value.ToString();
-                NoteTextBox.Text = row.Cells[9].Value.ToString();
+                    ProductIDTextBox.Text = row.Cells[0].Value != null ? Convert.ToString(row.Cells[0].Value) : "";
+                    BarcodeTextBox.Text = row.Cells[1].Value != null ? Convert.ToString(row.Cells[1].Value) : "";
+                    ProductNameTextBox.Text = row.Cells[2].Value != null ? Convert.ToString(row.Cells[2].Value) : "";
+                    CostPriceTextBox.Text = row.Cells[3].Value != null ? Convert.ToString(row.Cells[3].Value) : "";
+                    SellingPriceTextBox.Text = row.Cells[4].Value != null ? Convert.ToString(row.Cells[4].Value) : "";
+                    UnitInStockTextBox.Text = row.Cells[5].Value != null ? Convert.ToString(row.Cells[5].Value) : "";
+                    ReorderLevelTextBox.Text = row.Cells[6].Value != null ? Convert.ToString(row.Cells[6].Value) : "";
+                    CategoryNameTextBox.Text = row.Cells[7].Value != null ? Convert.ToString(row.Cells[7].Value) : "";
+                    UnitNameTextBox.Text = row.Cells[8].Value != null ? Convert.ToString(row.Cells[8].Value) : "";
+                    NoteTextBox.Text = row.Cells[9].Value != null ? Convert.ToString(row.Cells[9].Value) : "";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "DataGridView Selection Changed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
+
+
+        ///////////////////////////////////////////// Refresh Button //////////////////////////////////////////////////
+        private void RefreshButton_Click(object sender, EventArgs e)
+        {
+            KeywordTextBox.Clear();
+            AddNewButton.Text = "Add New";
+            DataGridView1.Enabled = true;
+            loadData("");
+        }
+
+        ///////////////////////////////////////////// Search Button //////////////////////////////////////////////////
+        private void SearchButton_Click(object sender, EventArgs e)
+        {
+            loadData(KeywordTextBox.Text.Trim());
+        }
+
+        //////////////////////////////////////// Keyword Text Box Key down //////////////////////////////////////////
+        private void KeywordTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; //ปิดเสียง Windows
+                loadData(KeywordTextBox.Text.Trim());
+            }
+        }
+
+        //////////////////////////////////////// Keyword Text Box Double Click //////////////////////////////////////////
+        private void KeywordTextBox_DoubleClick(object sender, EventArgs e)
+        {
+            KeywordTextBox.Clear();
+            KeywordTextBox.Focus();
+        }
+
+        ///////////////////////////////////////////// Keyword Text Box AutoComplete //////////////////////////////////////////////////
+        private void KeywordTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
 
     }
 
