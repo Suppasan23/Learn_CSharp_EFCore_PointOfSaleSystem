@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Learn_CSharp_EFCore_PointOfSaleSystem.Models.Db;
+using Learn_CSharp_EFCore_PointOfSaleSystem.Properties;
+using Microsoft.VisualBasic.ApplicationServices;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace Learn_CSharp_EFCore_PointOfSaleSystem
@@ -82,9 +84,15 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
 
 
         ///////////////////////////////////////////// GataGridView Cell Click /////////////////////////////////////////////
-        private int selectedID = 0;
+        
         private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            HandleCellClick();
+        }
+
+        private void HandleCellClick()
+        {
+            int selectedID = 0;
             try
             {
                 if (DataGridView1.SelectedRows.Count > 0)
@@ -109,7 +117,6 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             {
                 MessageBox.Show("Error: " + ex.Message, "DataGridView Selection Changed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
 
@@ -156,16 +163,42 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         {
             try
             {
+                string basePath = AppDomain.CurrentDomain.BaseDirectory;
+                string desiredPath = basePath.Substring(0, basePath.LastIndexOf("\\bin\\Debug\\"));
+                string imagePath;
+
                 if (AddNewButton.Text.Trim() == "Add New")
                 {
                     AddNewButton.Text = "Cancel";
-                    AddNewButton.Image = Image.FromFile("C:\\Users\\SUPPASAN\\Desktop\\Learn_CSharp_EFCore_PointOfSaleSystem\\Learn_CSharp_EFCore_PointOfSaleSystem\\Resources\\Oxygen-Icons.org-Oxygen-Actions-document-close.96.png");
+                    imagePath = Path.Combine(desiredPath, "Resources", "Oxygen-Icons.org-Oxygen-Actions-document-close.96.png");
+                    foreach(var txt in this.Controls.OfType<TextBox>())
+                    {
+                        txt.Clear();
+                    }
+                    DataGridView1.Enabled = false;
+                    BarcodeTextBox.ReadOnly = false;
+
+                    CostPriceTextBox.Text = "0";
+                    SellingPriceTextBox.Text= "0";
+                    UnitInStockTextBox.Text = "0";
+                    ReorderLevelTextBox.Text = "0";
+                    CategoryNameTextBox.Text = "Units";
+                    NoteTextBox.Text = "Note";
+
+                    BarcodeTextBox.Focus();
                 }
-                else
+                else //(== "Cancel")
                 {
                     AddNewButton.Text = "Add New";
-                    AddNewButton.Image = Image.FromFile("C:\\Users\\SUPPASAN\\Desktop\\Learn_CSharp_EFCore_PointOfSaleSystem\\Learn_CSharp_EFCore_PointOfSaleSystem\\Resources\\Oxygen-Icons.org-Oxygen-Actions-document-new.96 .png");
+                    imagePath = Path.Combine(desiredPath, "Resources", "Oxygen-Icons.org-Oxygen-Actions-document-new.96.png");
+                    BarcodeTextBox.ReadOnly = true;
+                    DataGridView1.Enabled = true;
+                    KeywordTextBox.Focus();
+                    HandleCellClick();
                 }
+
+                AddNewButton.Image = Image.FromFile(imagePath);
+
             }
             catch (Exception ex)
             {
@@ -176,3 +209,4 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
     }
 
 }
+

@@ -113,9 +113,9 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Oxygen_Icons_org_Oxygen_Actions_document_new_96_ {
+        internal static System.Drawing.Bitmap Oxygen_Icons_org_Oxygen_Actions_document_new_96 {
             get {
-                object obj = ResourceManager.GetObject("Oxygen-Icons.org-Oxygen-Actions-document-new.96 ", resourceCulture);
+                object obj = ResourceManager.GetObject("Oxygen-Icons.org-Oxygen-Actions-document-new.96", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

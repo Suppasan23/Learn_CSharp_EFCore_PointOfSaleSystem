@@ -35,7 +35,7 @@
             KeywordTextBox = new TextBox();
             AddNewButton = new Button();
             SaveButton = new Button();
-            BeleteButton = new Button();
+            DeleteButton = new Button();
             RefreshButton = new Button();
             statusStrip1 = new StatusStrip();
             DataGridView1 = new DataGridView();
@@ -100,7 +100,7 @@
             tableLayoutPanel1.Controls.Add(KeywordTextBox, 0, 0);
             tableLayoutPanel1.Controls.Add(AddNewButton, 3, 0);
             tableLayoutPanel1.Controls.Add(SaveButton, 4, 0);
-            tableLayoutPanel1.Controls.Add(BeleteButton, 5, 0);
+            tableLayoutPanel1.Controls.Add(DeleteButton, 5, 0);
             tableLayoutPanel1.Controls.Add(RefreshButton, 2, 0);
             tableLayoutPanel1.Dock = DockStyle.Top;
             tableLayoutPanel1.Location = new Point(0, 83);
@@ -139,7 +139,7 @@
             // AddNewButton
             // 
             AddNewButton.Dock = DockStyle.Fill;
-            AddNewButton.Image = Properties.Resources.Oxygen_Icons_org_Oxygen_Actions_document_new_96_;
+            AddNewButton.Image = Properties.Resources.Oxygen_Icons_org_Oxygen_Actions_document_new_96;
             AddNewButton.Location = new Point(703, 3);
             AddNewButton.Name = "AddNewButton";
             AddNewButton.Size = new Size(94, 34);
@@ -161,17 +161,17 @@
             SaveButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             SaveButton.UseVisualStyleBackColor = true;
             // 
-            // BeleteButton
+            // DeleteButton
             // 
-            BeleteButton.Dock = DockStyle.Fill;
-            BeleteButton.Image = Properties.Resources.Oxygen_Icons_org_Oxygen_Actions_document_close_96;
-            BeleteButton.Location = new Point(903, 3);
-            BeleteButton.Name = "BeleteButton";
-            BeleteButton.Size = new Size(94, 34);
-            BeleteButton.TabIndex = 5;
-            BeleteButton.Text = "Belete";
-            BeleteButton.TextImageRelation = TextImageRelation.ImageBeforeText;
-            BeleteButton.UseVisualStyleBackColor = true;
+            DeleteButton.Dock = DockStyle.Fill;
+            DeleteButton.Image = Properties.Resources.Oxygen_Icons_org_Oxygen_Actions_document_close_96;
+            DeleteButton.Location = new Point(903, 3);
+            DeleteButton.Name = "DeleteButton";
+            DeleteButton.Size = new Size(94, 34);
+            DeleteButton.TabIndex = 5;
+            DeleteButton.Text = "Delete";
+            DeleteButton.TextImageRelation = TextImageRelation.ImageBeforeText;
+            DeleteButton.UseVisualStyleBackColor = true;
             // 
             // RefreshButton
             // 
@@ -416,7 +416,7 @@
         private TextBox KeywordTextBox;
         private Button AddNewButton;
         private Button SaveButton;
-        private Button BeleteButton;
+        private Button DeleteButton;
         private Button RefreshButton;
         private StatusStrip statusStrip1;
         private DataGridView DataGridView1;
