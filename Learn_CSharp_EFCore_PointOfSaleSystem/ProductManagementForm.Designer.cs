@@ -147,6 +147,7 @@
             AddNewButton.Text = "Add New";
             AddNewButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             AddNewButton.UseVisualStyleBackColor = true;
+            AddNewButton.Click += AddNewButton_Click;
             // 
             // SaveButton
             // 

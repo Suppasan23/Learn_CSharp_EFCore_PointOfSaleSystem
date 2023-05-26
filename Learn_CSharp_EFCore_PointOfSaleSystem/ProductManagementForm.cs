@@ -4,10 +4,14 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Learn_CSharp_EFCore_PointOfSaleSystem.Models.Db;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace Learn_CSharp_EFCore_PointOfSaleSystem
 {
@@ -17,6 +21,11 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         public ProductManagementForm()
         {
             InitializeComponent();
+
+            ProductIDTextBox.ReadOnly = true;
+            BarcodeTextBox.MaxLength = 15;
+            ProductNameTextBox.MaxLength = 50;
+
             DataGridView1.ReadOnly = true;
             DataGridView1.MultiSelect = false;
             DataGridView1.AllowUserToAddRows = false;
@@ -142,6 +151,27 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
 
         }
 
+        ///////////////////////////////////////////// Add New ////////////////////////////////////////////////////////
+        private void AddNewButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (AddNewButton.Text.Trim() == "Add New")
+                {
+                    AddNewButton.Text = "Cancel";
+                    AddNewButton.Image = Image.FromFile("C:\\Users\\SUPPASAN\\Desktop\\Learn_CSharp_EFCore_PointOfSaleSystem\\Learn_CSharp_EFCore_PointOfSaleSystem\\Resources\\Oxygen-Icons.org-Oxygen-Actions-document-close.96.png");
+                }
+                else
+                {
+                    AddNewButton.Text = "Add New";
+                    AddNewButton.Image = Image.FromFile("C:\\Users\\SUPPASAN\\Desktop\\Learn_CSharp_EFCore_PointOfSaleSystem\\Learn_CSharp_EFCore_PointOfSaleSystem\\Resources\\Oxygen-Icons.org-Oxygen-Actions-document-new.96 .png");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Add New", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
     }
 
