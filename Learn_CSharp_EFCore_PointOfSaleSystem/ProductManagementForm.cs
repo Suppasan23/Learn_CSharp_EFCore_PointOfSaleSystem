@@ -46,6 +46,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         private void ProductManagementForm_Load(object sender, EventArgs e)
         {
             loadData("");
+            HandleCellClick();
         }
 
         ///////////////////////////////////////////// Load Data /////////////////////////////////////////////
@@ -79,12 +80,11 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             AddNewButton.Text = "Add New";
             DataGridView1.Enabled = true;
             KeywordTextBox.Focus();
-
         }
 
 
         ///////////////////////////////////////////// GataGridView Cell Click /////////////////////////////////////////////
-        
+
         private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             HandleCellClick();
@@ -161,29 +161,35 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         ///////////////////////////////////////////// Add New ////////////////////////////////////////////////////////
         private void AddNewButton_Click(object sender, EventArgs e)
         {
+            HandleAddNewButton(AddNewButton.Text.Trim());
+        }
+
+        private void HandleAddNewButton(string buttonState)
+        {
             try
             {
                 string basePath = AppDomain.CurrentDomain.BaseDirectory;
                 string desiredPath = basePath.Substring(0, basePath.LastIndexOf("\\bin\\Debug\\"));
                 string imagePath;
 
-                if (AddNewButton.Text.Trim() == "Add New")
+                if (buttonState == "Add New")
                 {
                     AddNewButton.Text = "Cancel";
                     imagePath = Path.Combine(desiredPath, "Resources", "Oxygen-Icons.org-Oxygen-Actions-document-close.96.png");
-                    foreach(var txt in this.Controls.OfType<TextBox>())
+                    foreach (var txt in this.Controls.OfType<TextBox>())
                     {
                         txt.Clear();
                     }
                     DataGridView1.Enabled = false;
+                    DataGridView1.DataSource = "";
                     BarcodeTextBox.ReadOnly = false;
 
                     CostPriceTextBox.Text = "0";
-                    SellingPriceTextBox.Text= "0";
+                    SellingPriceTextBox.Text = "0";
                     UnitInStockTextBox.Text = "0";
                     ReorderLevelTextBox.Text = "0";
-                    CategoryNameTextBox.Text = "Units";
-                    NoteTextBox.Text = "Note";
+                    CategoryNameTextBox.Text = "";
+                    NoteTextBox.Text = "";
 
                     BarcodeTextBox.Focus();
                 }
@@ -194,6 +200,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     BarcodeTextBox.ReadOnly = true;
                     DataGridView1.Enabled = true;
                     KeywordTextBox.Focus();
+                    loadData("");
                     HandleCellClick();
                 }
 
@@ -204,6 +211,94 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             {
                 MessageBox.Show("Error: " + ex.Message, "Add New", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+
+
+        ///////////////////////////////////////////// Save Button ////////////////////////////////////////////////////////
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            if(String.IsNullOrEmpty(BarcodeTextBox.Text.Trim()) || String.IsNullOrEmpty(ProductNameTextBox.Text.Trim()))
+            {
+                MessageBox.Show("Please fill in the Barcode and the Name of the Product.", "Error save data", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            decimal pCostPrice;
+            if(!decimal.TryParse(CostPriceTextBox.Text.Trim(),out pCostPrice))
+            {
+                MessageBox.Show("Fill the cost price in number only.", "Error save data", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                CostPriceTextBox.Focus();
+                CostPriceTextBox.SelectAll();
+                return;
+            }
+
+            decimal pSellingPrice;
+            if (!decimal.TryParse(SellingPriceTextBox.Text.Trim(), out pSellingPrice))
+            {
+                MessageBox.Show("Fill the selling price in number only.", "Error save data", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                SellingPriceTextBox.Focus();
+                SellingPriceTextBox.SelectAll();
+                return;
+            }
+
+            int pUnitInStock;
+            if (!int.TryParse(UnitInStockTextBox.Text.Trim(), out pUnitInStock))
+            {
+                MessageBox.Show("Fill the unit in stock in non-fraction number only.", "Error save data", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                UnitInStockTextBox.Focus();
+                UnitInStockTextBox.SelectAll();
+                return;
+            }
+
+            byte pReorderLevel;
+            if (!byte.TryParse(ReorderLevelTextBox.Text.Trim(), out pReorderLevel))
+            {
+                MessageBox.Show("Fill the re order level in non-fraction number only.", "Error save data", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ReorderLevelTextBox.Focus();
+                ReorderLevelTextBox.SelectAll();
+                return;
+            }
+
+            string pBarcode = Convert.ToString(BarcodeTextBox.Text.Trim());
+            string pName = Convert.ToString(ProductNameTextBox.Text.Trim());
+            string pCategoryName = Convert.ToString(CategoryNameTextBox.Text.Trim());
+            string pUnitName = Convert.ToString(UnitNameTextBox.Text.Trim());
+            string pNote = Convert.ToString(NoteTextBox.Text.Trim());
+
+            DialogResult result;
+
+            if (AddNewButton.Text.Trim() == "Cancel") //INSERT INTO
+            {
+                result = MessageBox.Show("Do you want to add this data?", "Add new product", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if(result == DialogResult.Yes) 
+                { 
+                    using(var tr = db.Database.BeginTransaction())
+                    {
+                        Product p = new Product();
+                        p.ProductBarcode = pBarcode;
+                        p.ProductName = pName;
+                        p.CostPrice = pCostPrice;
+                        p.SellingPrice = pSellingPrice;
+                        p.UnitInStock = pUnitInStock;
+                        p.ReoderLevel = pReorderLevel;
+                        p.CategoryName = pCategoryName;
+                        p.UnitName = pUnitName;
+                        p.Note = pNote;
+
+                        db.Products.Add(p); 
+                        db.SaveChanges();
+                        tr.Commit();
+
+                        MessageBox.Show("Record has been added successfully.", "Saving data",MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        HandleAddNewButton(AddNewButton.Text.Trim());
+                    }
+
+                }
+
+            }
+
         }
 
     }

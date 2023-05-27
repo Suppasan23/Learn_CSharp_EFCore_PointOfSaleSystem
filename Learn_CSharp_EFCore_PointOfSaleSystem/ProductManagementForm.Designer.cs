@@ -160,6 +160,7 @@
             SaveButton.Text = "Save";
             SaveButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             SaveButton.UseVisualStyleBackColor = true;
+            SaveButton.Click += SaveButton_Click;
             // 
             // DeleteButton
             // 
