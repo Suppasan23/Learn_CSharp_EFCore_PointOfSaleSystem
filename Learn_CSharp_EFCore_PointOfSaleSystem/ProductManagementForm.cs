@@ -32,6 +32,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             DataGridView1.MultiSelect = false;
             DataGridView1.AllowUserToAddRows = false;
             DataGridView1.AllowUserToDeleteRows = false;
+            DataGridView1.AllowUserToResizeRows = false;
             DataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -83,25 +84,45 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         }
 
 
-        ///////////////////////////////////////////// GataGridView Cell Click /////////////////////////////////////////////
+        ///////////////////////////////////////////// GataGridView Cell Click , Key up , Key down  /////////////////////////////////////////////
 
         private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             HandleCellClick(Convert.ToInt32(DataGridView1.SelectedRows[0].Cells[0].Value));
         }
 
-        private void HandleCellClick(int comingID)
+        private void DataGridView1_KeyDown(object sender, KeyEventArgs e)
         {
+            HandleCellClick(Convert.ToInt32(DataGridView1.SelectedRows[0].Cells[0].Value));
+        }
+
+        private void DataGridView1_KeyUp(object sender, KeyEventArgs e)
+        {
+            HandleCellClick(Convert.ToInt32(DataGridView1.SelectedRows[0].Cells[0].Value));
+        }
+
+        private void HandleCellClick(int receiveID)
+        {
+            int selectedID = receiveID;
             try
             {
-                if (comingID > 0)
+                if (selectedID > 0)
                 {
+                    foreach (DataGridViewRow row in DataGridView1.Rows)
+                    {
+                        if (Convert.ToInt32(row.Cells[0].Value) == selectedID)
+                        {
+                            DataGridView1.ClearSelection();
+                            row.Selected = true;
+                            break;
+                        }
+                    }
 
                     var m = (from i in db.Products
-                             where i.ProductId == comingID
+                             where i.ProductId == selectedID
                              select i).FirstOrDefault();
 
-                    if (m != null) 
+                    if (m != null)
                     {
                         ProductIDTextBox.Text = Convert.ToString(m.ProductId);
                         BarcodeTextBox.Text = Convert.ToString(m.ProductBarcode);
@@ -114,6 +135,14 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                         UnitNameTextBox.Text = Convert.ToString(m.UnitName);
                         NoteTextBox.Text = Convert.ToString(m.Note);
                     }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
                 }
             }
             catch (Exception ex)
@@ -130,6 +159,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             AddNewButton.Text = "Add New";
             DataGridView1.Enabled = true;
             loadData("");
+            HandleCellClick(1);
         }
 
         ///////////////////////////////////////////// Search Button //////////////////////////////////////////////////
@@ -164,10 +194,10 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         ///////////////////////////////////////////// Add New ////////////////////////////////////////////////////////
         private void AddNewButton_Click(object sender, EventArgs e)
         {
-            HandleAddNewButton(AddNewButton.Text.Trim());
+            HandleAddNewButton(AddNewButton.Text.Trim(), 1);
         }
 
-        private void HandleAddNewButton(string buttonState)
+        private void HandleAddNewButton(string buttonState, int comingID)
         {
             try
             {
@@ -184,8 +214,12 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                         txt.Clear();
                     }
                     DataGridView1.Enabled = false;
-                    DataGridView1.DataSource = "";
                     BarcodeTextBox.ReadOnly = false;
+                    DataGridView1.DataSource = "";
+
+                    SearchButton.Enabled = false;
+                    RefreshButton.Enabled = false;
+                    DeleteButton.Enabled = false;
 
                     CostPriceTextBox.Text = "0";
                     SellingPriceTextBox.Text = "0";
@@ -198,13 +232,17 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 }
                 else //(== "Cancel")
                 {
+                    int sendingID = comingID;
                     AddNewButton.Text = "Add New";
                     imagePath = Path.Combine(desiredPath, "Resources", "Oxygen-Icons.org-Oxygen-Actions-document-new.96.png");
                     BarcodeTextBox.ReadOnly = true;
                     DataGridView1.Enabled = true;
+                    SearchButton.Enabled = true;
+                    RefreshButton.Enabled = true;
+                    DeleteButton.Enabled = true;
                     KeywordTextBox.Focus();
                     loadData("");
-                    HandleCellClick(1);
+                    HandleCellClick(sendingID);
                 }
 
                 AddNewButton.Image = Image.FromFile(imagePath);
@@ -229,13 +267,11 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 return;
             }
 
+
             int pProductID;
             if (!int.TryParse(ProductIDTextBox.Text.Trim(), out pProductID))
             {
-                MessageBox.Show("Cannot get m ID.", "Error save data", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                CostPriceTextBox.Focus();
-                CostPriceTextBox.SelectAll();
-                return;
+                pProductID = 0;
             }
 
             decimal pCostPrice;
@@ -282,49 +318,17 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
 
             DialogResult result;
 
-            if (AddNewButton.Text.Trim() == "Cancel") //INSERT INTO
+            if ((AddNewButton.Text.Trim() == "Cancel") && (pProductID == 0)) //INSERT INTO
             {
-                result = MessageBox.Show("Do you want to add this data?", "Add new m", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                result = MessageBox.Show("Do you want to add this data?", "Add new Product", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
                 {
                     using (var tr = db.Database.BeginTransaction())
                     {
-                        Product p = new Product();
-                        p.ProductBarcode = pBarcode;
-                        p.ProductName = pName;
-                        p.CostPrice = pCostPrice;
-                        p.SellingPrice = pSellingPrice;
-                        p.UnitInStock = pUnitInStock;
-                        p.ReoderLevel = pReorderLevel;
-                        p.CategoryName = pCategoryName;
-                        p.UnitName = pUnitName;
-                        p.Note = pNote;
-
-                        db.Products.Add(p);
-                        db.SaveChanges();
-                        tr.Commit();
-
-                        MessageBox.Show("Record has been added successfully.", "Saving data", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        HandleAddNewButton(AddNewButton.Text.Trim());
-                    }
-
-                }
-
-            }
-            else
-            {
-                result = MessageBox.Show("Do you want to edit this data?", "edit m", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes) 
-                { 
-                    using (var tr = db.Database.BeginTransaction()) 
-                    {
-                        var p = (from i in db.Products
-                                 where i.ProductId == pProductID
-                                 select i).FirstOrDefault(); 
-
-                        if(p != null) 
+                        try
                         {
+                            Product p = new Product();
                             p.ProductBarcode = pBarcode;
                             p.ProductName = pName;
                             p.CostPrice = pCostPrice;
@@ -335,20 +339,124 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                             p.UnitName = pUnitName;
                             p.Note = pNote;
 
+                            db.Products.Add(p);
                             db.SaveChanges();
-                            tr.Commit();
 
-                            MessageBox.Show("Edit has been successfully.", "Edited data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            pProductID = p.ProductId;
+
+                            MessageBox.Show("Record has been added successfully.", "Saving data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error: " + ex, "Saving Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        finally
+                        {
+                            tr.Commit();
+                            HandleAddNewButton(AddNewButton.Text.Trim(), pProductID);
+                        }
+
+                    }
+
+                }
+
+            }
+            else //EDIT DATA
+            {
+                result = MessageBox.Show("Do you want to edit this data?", "edit Product", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    using (var tr = db.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            var p = (from i in db.Products
+                                     where i.ProductId == pProductID
+                                     select i).FirstOrDefault();
+
+                            if (p != null)
+                            {
+                                p.ProductBarcode = pBarcode;
+                                p.ProductName = pName;
+                                p.CostPrice = pCostPrice;
+                                p.SellingPrice = pSellingPrice;
+                                p.UnitInStock = pUnitInStock;
+                                p.ReoderLevel = pReorderLevel;
+                                p.CategoryName = pCategoryName;
+                                p.UnitName = pUnitName;
+                                p.Note = pNote;
+
+                                db.SaveChanges();
+                                MessageBox.Show("Edit has been successfully.", "Edited data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error: " + ex, "Editing Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        finally
+                        {
+                            tr.Commit();
                             loadData("");
                             HandleCellClick(pProductID);
                         }
-                          
+
                     }
-                    
+
                 }
-                
+
             }
+
+        }
+
+        ///////////////////////////////////////////// Save Button ////////////////////////////////////////////////////////
+        private void DeleteButton_Click(object sender, EventArgs e)
+        {
+            int pProductID;
+            if (!int.TryParse(ProductIDTextBox.Text.Trim(), out pProductID))
+            {
+                MessageBox.Show("No data have selected", "Deleteing Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            DialogResult result;
+
+            result = MessageBox.Show("Do you want to delete this data?", "Delete Product", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             
+            if (result == DialogResult.Yes) 
+            {
+                using (var tr = db.Database.BeginTransaction())
+
+                try
+                {
+                    var p = (from i in db.Products
+                                where i.ProductId == pProductID
+                                select i).FirstOrDefault();   
+
+                    if(p != null)
+                    {
+                        db.Products.Remove(p);
+                        db.SaveChanges();
+                            
+
+                        MessageBox.Show("Delete data successfully.", "Delete data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex, "Deleteing Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    tr.Commit();
+                    loadData("");
+                    HandleCellClick(1);
+                }
+
+            }
+
         }
 
     }
