@@ -46,7 +46,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         private void ProductManagementForm_Load(object sender, EventArgs e)
         {
             loadData("");
-            HandleCellClick();
+            HandleCellClick(1);
         }
 
         ///////////////////////////////////////////// Load Data /////////////////////////////////////////////
@@ -59,8 +59,8 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                            ที่ = i.ProductId,
                            บาร์โค้ด = i.ProductBarcode,
                            ชื่อสินค้า = i.ProductName,
-                           ราคาทุน = i.CostPrice.Value.ToString("#,###,##0", System.Globalization.CultureInfo.InvariantCulture),
-                           ราคาขาย = i.SellingPrice.Value.ToString("#,###,##0", System.Globalization.CultureInfo.InvariantCulture),
+                           ราคาทุน = i.CostPrice != null ? i.CostPrice.Value.ToString("#,###,##0", System.Globalization.CultureInfo.InvariantCulture) : "",
+                           ราคาขาย = i.SellingPrice != null ? i.SellingPrice.Value.ToString("#,###,##0", System.Globalization.CultureInfo.InvariantCulture) : "",
                            จำนวนคงเหลือ = i.UnitInStock,
                            จำนวนรีโหลด = i.ReoderLevel,
                            ประเภทสินค้า = i.CategoryName,
@@ -87,30 +87,33 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
 
         private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            HandleCellClick();
+            HandleCellClick(Convert.ToInt32(DataGridView1.SelectedRows[0].Cells[0].Value));
         }
 
-        private void HandleCellClick()
+        private void HandleCellClick(int comingID)
         {
-            int selectedID = 0;
             try
             {
-                if (DataGridView1.SelectedRows.Count > 0)
+                if (comingID > 0)
                 {
-                    selectedID = Convert.ToInt32(DataGridView1.SelectedRows[0].Cells[0].Value);
 
-                    DataGridViewRow row = DataGridView1.SelectedRows[0];
+                    var m = (from i in db.Products
+                             where i.ProductId == comingID
+                             select i).FirstOrDefault();
 
-                    ProductIDTextBox.Text = row.Cells[0].Value != null ? Convert.ToString(row.Cells[0].Value) : "";
-                    BarcodeTextBox.Text = row.Cells[1].Value != null ? Convert.ToString(row.Cells[1].Value) : "";
-                    ProductNameTextBox.Text = row.Cells[2].Value != null ? Convert.ToString(row.Cells[2].Value) : "";
-                    CostPriceTextBox.Text = row.Cells[3].Value != null ? Convert.ToString(row.Cells[3].Value) : "";
-                    SellingPriceTextBox.Text = row.Cells[4].Value != null ? Convert.ToString(row.Cells[4].Value) : "";
-                    UnitInStockTextBox.Text = row.Cells[5].Value != null ? Convert.ToString(row.Cells[5].Value) : "";
-                    ReorderLevelTextBox.Text = row.Cells[6].Value != null ? Convert.ToString(row.Cells[6].Value) : "";
-                    CategoryNameTextBox.Text = row.Cells[7].Value != null ? Convert.ToString(row.Cells[7].Value) : "";
-                    UnitNameTextBox.Text = row.Cells[8].Value != null ? Convert.ToString(row.Cells[8].Value) : "";
-                    NoteTextBox.Text = row.Cells[9].Value != null ? Convert.ToString(row.Cells[9].Value) : "";
+                    if (m != null) 
+                    {
+                        ProductIDTextBox.Text = Convert.ToString(m.ProductId);
+                        BarcodeTextBox.Text = Convert.ToString(m.ProductBarcode);
+                        ProductNameTextBox.Text = Convert.ToString(m.ProductName);
+                        CostPriceTextBox.Text = m.CostPrice != null ? m.CostPrice.Value.ToString("#,###,##0", System.Globalization.CultureInfo.InvariantCulture) : "";
+                        SellingPriceTextBox.Text = m.SellingPrice != null ? m.SellingPrice.Value.ToString("#,###,##0", System.Globalization.CultureInfo.InvariantCulture) : "";
+                        UnitInStockTextBox.Text = Convert.ToString(m.UnitInStock);
+                        ReorderLevelTextBox.Text = Convert.ToString(m.ReoderLevel);
+                        CategoryNameTextBox.Text = Convert.ToString(m.CategoryName);
+                        UnitNameTextBox.Text = Convert.ToString(m.UnitName);
+                        NoteTextBox.Text = Convert.ToString(m.Note);
+                    }
                 }
             }
             catch (Exception ex)
@@ -201,7 +204,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     DataGridView1.Enabled = true;
                     KeywordTextBox.Focus();
                     loadData("");
-                    HandleCellClick();
+                    HandleCellClick(1);
                 }
 
                 AddNewButton.Image = Image.FromFile(imagePath);
@@ -218,14 +221,25 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         ///////////////////////////////////////////// Save Button ////////////////////////////////////////////////////////
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            if(String.IsNullOrEmpty(BarcodeTextBox.Text.Trim()) || String.IsNullOrEmpty(ProductNameTextBox.Text.Trim()))
+            if (String.IsNullOrEmpty(BarcodeTextBox.Text.Trim()) || String.IsNullOrEmpty(ProductNameTextBox.Text.Trim()))
             {
                 MessageBox.Show("Please fill in the Barcode and the Name of the Product.", "Error save data", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                BarcodeTextBox.Focus();
+                BarcodeTextBox.SelectAll();
+                return;
+            }
+
+            int pProductID;
+            if (!int.TryParse(ProductIDTextBox.Text.Trim(), out pProductID))
+            {
+                MessageBox.Show("Cannot get m ID.", "Error save data", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                CostPriceTextBox.Focus();
+                CostPriceTextBox.SelectAll();
                 return;
             }
 
             decimal pCostPrice;
-            if(!decimal.TryParse(CostPriceTextBox.Text.Trim(),out pCostPrice))
+            if (!decimal.TryParse(CostPriceTextBox.Text.Trim(), out pCostPrice))
             {
                 MessageBox.Show("Fill the cost price in number only.", "Error save data", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 CostPriceTextBox.Focus();
@@ -270,11 +284,11 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
 
             if (AddNewButton.Text.Trim() == "Cancel") //INSERT INTO
             {
-                result = MessageBox.Show("Do you want to add this data?", "Add new product", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                result = MessageBox.Show("Do you want to add this data?", "Add new m", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                if(result == DialogResult.Yes) 
-                { 
-                    using(var tr = db.Database.BeginTransaction())
+                if (result == DialogResult.Yes)
+                {
+                    using (var tr = db.Database.BeginTransaction())
                     {
                         Product p = new Product();
                         p.ProductBarcode = pBarcode;
@@ -287,21 +301,56 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                         p.UnitName = pUnitName;
                         p.Note = pNote;
 
-                        db.Products.Add(p); 
+                        db.Products.Add(p);
                         db.SaveChanges();
                         tr.Commit();
 
-                        MessageBox.Show("Record has been added successfully.", "Saving data",MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Record has been added successfully.", "Saving data", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         HandleAddNewButton(AddNewButton.Text.Trim());
                     }
 
                 }
 
             }
+            else
+            {
+                result = MessageBox.Show("Do you want to edit this data?", "edit m", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes) 
+                { 
+                    using (var tr = db.Database.BeginTransaction()) 
+                    {
+                        var p = (from i in db.Products
+                                 where i.ProductId == pProductID
+                                 select i).FirstOrDefault(); 
 
+                        if(p != null) 
+                        {
+                            p.ProductBarcode = pBarcode;
+                            p.ProductName = pName;
+                            p.CostPrice = pCostPrice;
+                            p.SellingPrice = pSellingPrice;
+                            p.UnitInStock = pUnitInStock;
+                            p.ReoderLevel = pReorderLevel;
+                            p.CategoryName = pCategoryName;
+                            p.UnitName = pUnitName;
+                            p.Note = pNote;
+
+                            db.SaveChanges();
+                            tr.Commit();
+
+                            MessageBox.Show("Edit has been successfully.", "Edited data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            loadData("");
+                            HandleCellClick(pProductID);
+                        }
+                          
+                    }
+                    
+                }
+                
+            }
+            
         }
 
     }
 
 }
-
