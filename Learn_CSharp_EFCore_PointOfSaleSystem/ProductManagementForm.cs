@@ -345,7 +345,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                             pProductID = p.ProductId;
 
                             MessageBox.Show("Record has been added successfully.", "Saving data", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            
+
                         }
                         catch (Exception ex)
                         {
@@ -424,36 +424,36 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             DialogResult result;
 
             result = MessageBox.Show("Do you want to delete this data?", "Delete Product", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            
-            if (result == DialogResult.Yes) 
+
+            if (result == DialogResult.Yes)
             {
                 using (var tr = db.Database.BeginTransaction())
 
-                try
-                {
-                    var p = (from i in db.Products
-                                where i.ProductId == pProductID
-                                select i).FirstOrDefault();   
-
-                    if(p != null)
+                    try
                     {
-                        db.Products.Remove(p);
-                        db.SaveChanges();
-                            
+                        var p = (from i in db.Products
+                                 where i.ProductId == pProductID
+                                 select i).FirstOrDefault();
 
-                        MessageBox.Show("Delete data successfully.", "Delete data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        if (p != null)
+                        {
+                            db.Products.Remove(p);
+                            db.SaveChanges();
+
+
+                            MessageBox.Show("Delete data successfully.", "Delete data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex, "Deleteing Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    tr.Commit();
-                    loadData("");
-                    HandleCellClick(1);
-                }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: " + ex, "Deleteing Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        tr.Commit();
+                        loadData("");
+                        HandleCellClick(1);
+                    }
 
             }
 
