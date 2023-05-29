@@ -38,32 +38,32 @@
             BarcodeSearchLabel = new Label();
             BarcodeTextBox = new TextBox();
             TransactionGroupBox = new GroupBox();
-            CustomerGroupBox = new GroupBox();
-            ProductGroupBox = new GroupBox();
-            CurrentDateLabel = new Label();
-            EmployeeIDLabel = new Label();
-            TransactionLabel = new Label();
-            EmployeeNameLabel = new Label();
-            CustomerIDLabel = new Label();
-            CustomerNameLabel = new Label();
-            ProductIDLabel = new Label();
-            SellingPriceLabel = new Label();
-            BarcodeShowLabel = new Label();
-            UnitInStockLabel1 = new Label();
-            ProductNameLabel = new Label();
-            QuantityLabel = new Label();
-            CurrentDateTextBox = new TextBox();
+            EmployeeNameTextBox = new TextBox();
             EmployeeIDTextBox = new TextBox();
             TransactionTextBox = new TextBox();
-            EmployeeNameTextBox = new TextBox();
-            CustomerIDTextBox = new TextBox();
+            CurrentDateTextBox = new TextBox();
+            EmployeeNameLabel = new Label();
+            TransactionLabel = new Label();
+            EmployeeIDLabel = new Label();
+            CurrentDateLabel = new Label();
+            CustomerGroupBox = new GroupBox();
             CustomerNameTextBox = new TextBox();
-            ProductNameTextBox = new TextBox();
-            BarcodeShowTextBox = new TextBox();
-            UnitInStockTextBox = new TextBox();
-            ProductIDTextBox = new TextBox();
-            SellingPriceTextBox = new TextBox();
+            CustomerIDTextBox = new TextBox();
+            CustomerNameLabel = new Label();
+            CustomerIDLabel = new Label();
+            ProductGroupBox = new GroupBox();
             QuantityUpDown = new NumericUpDown();
+            SellingPriceTextBox = new TextBox();
+            ProductIDTextBox = new TextBox();
+            UnitInStockTextBox = new TextBox();
+            BarcodeShowTextBox = new TextBox();
+            ProductNameTextBox = new TextBox();
+            QuantityLabel = new Label();
+            ProductNameLabel = new Label();
+            UnitInStockLabel1 = new Label();
+            BarcodeShowLabel = new Label();
+            SellingPriceLabel = new Label();
+            ProductIDLabel = new Label();
             dataGridView1 = new DataGridView();
             NewButton = new Button();
             CloseButton = new Button();
@@ -119,6 +119,7 @@
             // 
             timer1.Enabled = true;
             timer1.Interval = 1000;
+            timer1.Tick += timer1_Tick;
             // 
             // statusStrip1
             // 
@@ -168,6 +169,74 @@
             TransactionGroupBox.TabStop = false;
             TransactionGroupBox.Text = "Transaction";
             // 
+            // EmployeeNameTextBox
+            // 
+            EmployeeNameTextBox.Location = new Point(371, 50);
+            EmployeeNameTextBox.Name = "EmployeeNameTextBox";
+            EmployeeNameTextBox.ReadOnly = true;
+            EmployeeNameTextBox.Size = new Size(155, 23);
+            EmployeeNameTextBox.TabIndex = 1;
+            // 
+            // EmployeeIDTextBox
+            // 
+            EmployeeIDTextBox.Location = new Point(372, 20);
+            EmployeeIDTextBox.Name = "EmployeeIDTextBox";
+            EmployeeIDTextBox.ReadOnly = true;
+            EmployeeIDTextBox.Size = new Size(155, 23);
+            EmployeeIDTextBox.TabIndex = 1;
+            // 
+            // TransactionTextBox
+            // 
+            TransactionTextBox.Location = new Point(100, 50);
+            TransactionTextBox.Name = "TransactionTextBox";
+            TransactionTextBox.ReadOnly = true;
+            TransactionTextBox.Size = new Size(155, 23);
+            TransactionTextBox.TabIndex = 1;
+            // 
+            // CurrentDateTextBox
+            // 
+            CurrentDateTextBox.Location = new Point(100, 20);
+            CurrentDateTextBox.Name = "CurrentDateTextBox";
+            CurrentDateTextBox.ReadOnly = true;
+            CurrentDateTextBox.Size = new Size(155, 23);
+            CurrentDateTextBox.TabIndex = 1;
+            // 
+            // EmployeeNameLabel
+            // 
+            EmployeeNameLabel.AutoSize = true;
+            EmployeeNameLabel.Location = new Point(266, 58);
+            EmployeeNameLabel.Name = "EmployeeNameLabel";
+            EmployeeNameLabel.Size = new Size(100, 15);
+            EmployeeNameLabel.TabIndex = 0;
+            EmployeeNameLabel.Text = "Employee Name :";
+            // 
+            // TransactionLabel
+            // 
+            TransactionLabel.AutoSize = true;
+            TransactionLabel.Location = new Point(28, 58);
+            TransactionLabel.Name = "TransactionLabel";
+            TransactionLabel.Size = new Size(73, 15);
+            TransactionLabel.TabIndex = 0;
+            TransactionLabel.Text = "Transaction :";
+            // 
+            // EmployeeIDLabel
+            // 
+            EmployeeIDLabel.AutoSize = true;
+            EmployeeIDLabel.Location = new Point(287, 28);
+            EmployeeIDLabel.Name = "EmployeeIDLabel";
+            EmployeeIDLabel.Size = new Size(79, 15);
+            EmployeeIDLabel.TabIndex = 0;
+            EmployeeIDLabel.Text = "Employee ID :";
+            // 
+            // CurrentDateLabel
+            // 
+            CurrentDateLabel.AutoSize = true;
+            CurrentDateLabel.Location = new Point(21, 28);
+            CurrentDateLabel.Name = "CurrentDateLabel";
+            CurrentDateLabel.Size = new Size(80, 15);
+            CurrentDateLabel.TabIndex = 0;
+            CurrentDateLabel.Text = "Current Date :";
+            // 
             // CustomerGroupBox
             // 
             CustomerGroupBox.Controls.Add(CustomerNameTextBox);
@@ -180,6 +249,38 @@
             CustomerGroupBox.TabIndex = 5;
             CustomerGroupBox.TabStop = false;
             CustomerGroupBox.Text = "Customer";
+            // 
+            // CustomerNameTextBox
+            // 
+            CustomerNameTextBox.Location = new Point(127, 50);
+            CustomerNameTextBox.Name = "CustomerNameTextBox";
+            CustomerNameTextBox.Size = new Size(155, 23);
+            CustomerNameTextBox.TabIndex = 1;
+            // 
+            // CustomerIDTextBox
+            // 
+            CustomerIDTextBox.Location = new Point(127, 20);
+            CustomerIDTextBox.Name = "CustomerIDTextBox";
+            CustomerIDTextBox.Size = new Size(155, 23);
+            CustomerIDTextBox.TabIndex = 1;
+            // 
+            // CustomerNameLabel
+            // 
+            CustomerNameLabel.AutoSize = true;
+            CustomerNameLabel.Location = new Point(21, 58);
+            CustomerNameLabel.Name = "CustomerNameLabel";
+            CustomerNameLabel.Size = new Size(100, 15);
+            CustomerNameLabel.TabIndex = 0;
+            CustomerNameLabel.Text = "Customer Name :";
+            // 
+            // CustomerIDLabel
+            // 
+            CustomerIDLabel.AutoSize = true;
+            CustomerIDLabel.Location = new Point(41, 28);
+            CustomerIDLabel.Name = "CustomerIDLabel";
+            CustomerIDLabel.Size = new Size(79, 15);
+            CustomerIDLabel.TabIndex = 0;
+            CustomerIDLabel.Text = "Customer ID :";
             // 
             // ProductGroupBox
             // 
@@ -202,104 +303,52 @@
             ProductGroupBox.TabStop = false;
             ProductGroupBox.Text = "Product";
             // 
-            // CurrentDateLabel
+            // QuantityUpDown
             // 
-            CurrentDateLabel.AutoSize = true;
-            CurrentDateLabel.Location = new Point(21, 28);
-            CurrentDateLabel.Name = "CurrentDateLabel";
-            CurrentDateLabel.Size = new Size(80, 15);
-            CurrentDateLabel.TabIndex = 0;
-            CurrentDateLabel.Text = "Current Date :";
+            QuantityUpDown.Location = new Point(672, 52);
+            QuantityUpDown.Name = "QuantityUpDown";
+            QuantityUpDown.Size = new Size(165, 23);
+            QuantityUpDown.TabIndex = 2;
             // 
-            // EmployeeIDLabel
+            // SellingPriceTextBox
             // 
-            EmployeeIDLabel.AutoSize = true;
-            EmployeeIDLabel.Location = new Point(287, 28);
-            EmployeeIDLabel.Name = "EmployeeIDLabel";
-            EmployeeIDLabel.Size = new Size(79, 15);
-            EmployeeIDLabel.TabIndex = 0;
-            EmployeeIDLabel.Text = "Employee ID :";
+            SellingPriceTextBox.Location = new Point(100, 52);
+            SellingPriceTextBox.Name = "SellingPriceTextBox";
+            SellingPriceTextBox.ReadOnly = true;
+            SellingPriceTextBox.Size = new Size(165, 23);
+            SellingPriceTextBox.TabIndex = 1;
             // 
-            // TransactionLabel
+            // ProductIDTextBox
             // 
-            TransactionLabel.AutoSize = true;
-            TransactionLabel.Location = new Point(28, 58);
-            TransactionLabel.Name = "TransactionLabel";
-            TransactionLabel.Size = new Size(73, 15);
-            TransactionLabel.TabIndex = 0;
-            TransactionLabel.Text = "Transaction :";
+            ProductIDTextBox.Location = new Point(101, 21);
+            ProductIDTextBox.Name = "ProductIDTextBox";
+            ProductIDTextBox.ReadOnly = true;
+            ProductIDTextBox.Size = new Size(165, 23);
+            ProductIDTextBox.TabIndex = 1;
             // 
-            // EmployeeNameLabel
+            // UnitInStockTextBox
             // 
-            EmployeeNameLabel.AutoSize = true;
-            EmployeeNameLabel.Location = new Point(266, 58);
-            EmployeeNameLabel.Name = "EmployeeNameLabel";
-            EmployeeNameLabel.Size = new Size(100, 15);
-            EmployeeNameLabel.TabIndex = 0;
-            EmployeeNameLabel.Text = "Employee Name :";
+            UnitInStockTextBox.Location = new Point(381, 52);
+            UnitInStockTextBox.Name = "UnitInStockTextBox";
+            UnitInStockTextBox.ReadOnly = true;
+            UnitInStockTextBox.Size = new Size(165, 23);
+            UnitInStockTextBox.TabIndex = 1;
             // 
-            // CustomerIDLabel
+            // BarcodeShowTextBox
             // 
-            CustomerIDLabel.AutoSize = true;
-            CustomerIDLabel.Location = new Point(41, 28);
-            CustomerIDLabel.Name = "CustomerIDLabel";
-            CustomerIDLabel.Size = new Size(79, 15);
-            CustomerIDLabel.TabIndex = 0;
-            CustomerIDLabel.Text = "Customer ID :";
+            BarcodeShowTextBox.Location = new Point(382, 21);
+            BarcodeShowTextBox.Name = "BarcodeShowTextBox";
+            BarcodeShowTextBox.ReadOnly = true;
+            BarcodeShowTextBox.Size = new Size(165, 23);
+            BarcodeShowTextBox.TabIndex = 1;
             // 
-            // CustomerNameLabel
+            // ProductNameTextBox
             // 
-            CustomerNameLabel.AutoSize = true;
-            CustomerNameLabel.Location = new Point(21, 58);
-            CustomerNameLabel.Name = "CustomerNameLabel";
-            CustomerNameLabel.Size = new Size(100, 15);
-            CustomerNameLabel.TabIndex = 0;
-            CustomerNameLabel.Text = "Customer Name :";
-            // 
-            // ProductIDLabel
-            // 
-            ProductIDLabel.AutoSize = true;
-            ProductIDLabel.Location = new Point(25, 29);
-            ProductIDLabel.Name = "ProductIDLabel";
-            ProductIDLabel.Size = new Size(69, 15);
-            ProductIDLabel.TabIndex = 0;
-            ProductIDLabel.Text = "Product ID :";
-            // 
-            // SellingPriceLabel
-            // 
-            SellingPriceLabel.AutoSize = true;
-            SellingPriceLabel.Location = new Point(17, 60);
-            SellingPriceLabel.Name = "SellingPriceLabel";
-            SellingPriceLabel.Size = new Size(77, 15);
-            SellingPriceLabel.TabIndex = 0;
-            SellingPriceLabel.Text = "Selling Price :";
-            // 
-            // BarcodeShowLabel
-            // 
-            BarcodeShowLabel.AutoSize = true;
-            BarcodeShowLabel.Location = new Point(319, 29);
-            BarcodeShowLabel.Name = "BarcodeShowLabel";
-            BarcodeShowLabel.Size = new Size(56, 15);
-            BarcodeShowLabel.TabIndex = 0;
-            BarcodeShowLabel.Text = "Barcode :";
-            // 
-            // UnitInStockLabel1
-            // 
-            UnitInStockLabel1.AutoSize = true;
-            UnitInStockLabel1.Location = new Point(295, 60);
-            UnitInStockLabel1.Name = "UnitInStockLabel1";
-            UnitInStockLabel1.Size = new Size(80, 15);
-            UnitInStockLabel1.TabIndex = 0;
-            UnitInStockLabel1.Text = "Unit In Stock :";
-            // 
-            // ProductNameLabel
-            // 
-            ProductNameLabel.AutoSize = true;
-            ProductNameLabel.Location = new Point(575, 29);
-            ProductNameLabel.Name = "ProductNameLabel";
-            ProductNameLabel.Size = new Size(90, 15);
-            ProductNameLabel.TabIndex = 0;
-            ProductNameLabel.Text = "Product Name :";
+            ProductNameTextBox.Location = new Point(672, 21);
+            ProductNameTextBox.Name = "ProductNameTextBox";
+            ProductNameTextBox.ReadOnly = true;
+            ProductNameTextBox.Size = new Size(165, 23);
+            ProductNameTextBox.TabIndex = 1;
             // 
             // QuantityLabel
             // 
@@ -310,98 +359,50 @@
             QuantityLabel.TabIndex = 0;
             QuantityLabel.Text = "Quantity :";
             // 
-            // CurrentDateTextBox
+            // ProductNameLabel
             // 
-            CurrentDateTextBox.Location = new Point(100, 20);
-            CurrentDateTextBox.Name = "CurrentDateTextBox";
-            CurrentDateTextBox.ReadOnly = true;
-            CurrentDateTextBox.Size = new Size(155, 23);
-            CurrentDateTextBox.TabIndex = 1;
+            ProductNameLabel.AutoSize = true;
+            ProductNameLabel.Location = new Point(575, 29);
+            ProductNameLabel.Name = "ProductNameLabel";
+            ProductNameLabel.Size = new Size(90, 15);
+            ProductNameLabel.TabIndex = 0;
+            ProductNameLabel.Text = "Product Name :";
             // 
-            // EmployeeIDTextBox
+            // UnitInStockLabel1
             // 
-            EmployeeIDTextBox.Location = new Point(372, 20);
-            EmployeeIDTextBox.Name = "EmployeeIDTextBox";
-            EmployeeIDTextBox.ReadOnly = true;
-            EmployeeIDTextBox.Size = new Size(155, 23);
-            EmployeeIDTextBox.TabIndex = 1;
+            UnitInStockLabel1.AutoSize = true;
+            UnitInStockLabel1.Location = new Point(295, 60);
+            UnitInStockLabel1.Name = "UnitInStockLabel1";
+            UnitInStockLabel1.Size = new Size(80, 15);
+            UnitInStockLabel1.TabIndex = 0;
+            UnitInStockLabel1.Text = "Unit In Stock :";
             // 
-            // TransactionTextBox
+            // BarcodeShowLabel
             // 
-            TransactionTextBox.Location = new Point(100, 50);
-            TransactionTextBox.Name = "TransactionTextBox";
-            TransactionTextBox.ReadOnly = true;
-            TransactionTextBox.Size = new Size(155, 23);
-            TransactionTextBox.TabIndex = 1;
+            BarcodeShowLabel.AutoSize = true;
+            BarcodeShowLabel.Location = new Point(319, 29);
+            BarcodeShowLabel.Name = "BarcodeShowLabel";
+            BarcodeShowLabel.Size = new Size(56, 15);
+            BarcodeShowLabel.TabIndex = 0;
+            BarcodeShowLabel.Text = "Barcode :";
             // 
-            // EmployeeNameTextBox
+            // SellingPriceLabel
             // 
-            EmployeeNameTextBox.Location = new Point(371, 50);
-            EmployeeNameTextBox.Name = "EmployeeNameTextBox";
-            EmployeeNameTextBox.ReadOnly = true;
-            EmployeeNameTextBox.Size = new Size(155, 23);
-            EmployeeNameTextBox.TabIndex = 1;
+            SellingPriceLabel.AutoSize = true;
+            SellingPriceLabel.Location = new Point(17, 60);
+            SellingPriceLabel.Name = "SellingPriceLabel";
+            SellingPriceLabel.Size = new Size(77, 15);
+            SellingPriceLabel.TabIndex = 0;
+            SellingPriceLabel.Text = "Selling Price :";
             // 
-            // CustomerIDTextBox
+            // ProductIDLabel
             // 
-            CustomerIDTextBox.Location = new Point(127, 20);
-            CustomerIDTextBox.Name = "CustomerIDTextBox";
-            CustomerIDTextBox.Size = new Size(155, 23);
-            CustomerIDTextBox.TabIndex = 1;
-            // 
-            // CustomerNameTextBox
-            // 
-            CustomerNameTextBox.Location = new Point(127, 50);
-            CustomerNameTextBox.Name = "CustomerNameTextBox";
-            CustomerNameTextBox.Size = new Size(155, 23);
-            CustomerNameTextBox.TabIndex = 1;
-            // 
-            // ProductNameTextBox
-            // 
-            ProductNameTextBox.Location = new Point(672, 21);
-            ProductNameTextBox.Name = "ProductNameTextBox";
-            ProductNameTextBox.ReadOnly = true;
-            ProductNameTextBox.Size = new Size(165, 23);
-            ProductNameTextBox.TabIndex = 1;
-            // 
-            // BarcodeShowTextBox
-            // 
-            BarcodeShowTextBox.Location = new Point(382, 21);
-            BarcodeShowTextBox.Name = "BarcodeShowTextBox";
-            BarcodeShowTextBox.ReadOnly = true;
-            BarcodeShowTextBox.Size = new Size(165, 23);
-            BarcodeShowTextBox.TabIndex = 1;
-            // 
-            // UnitInStockTextBox
-            // 
-            UnitInStockTextBox.Location = new Point(381, 52);
-            UnitInStockTextBox.Name = "UnitInStockTextBox";
-            UnitInStockTextBox.ReadOnly = true;
-            UnitInStockTextBox.Size = new Size(165, 23);
-            UnitInStockTextBox.TabIndex = 1;
-            // 
-            // ProductIDTextBox
-            // 
-            ProductIDTextBox.Location = new Point(101, 21);
-            ProductIDTextBox.Name = "ProductIDTextBox";
-            ProductIDTextBox.ReadOnly = true;
-            ProductIDTextBox.Size = new Size(165, 23);
-            ProductIDTextBox.TabIndex = 1;
-            // 
-            // SellingPriceTextBox
-            // 
-            SellingPriceTextBox.Location = new Point(100, 52);
-            SellingPriceTextBox.Name = "SellingPriceTextBox";
-            SellingPriceTextBox.ReadOnly = true;
-            SellingPriceTextBox.Size = new Size(165, 23);
-            SellingPriceTextBox.TabIndex = 1;
-            // 
-            // QuantityUpDown
-            // 
-            QuantityUpDown.Location = new Point(672, 52);
-            QuantityUpDown.Name = "QuantityUpDown";
-            QuantityUpDown.Size = new Size(165, 23);
-            QuantityUpDown.TabIndex = 2;
+            ProductIDLabel.AutoSize = true;
+            ProductIDLabel.Location = new Point(25, 29);
+            ProductIDLabel.Name = "ProductIDLabel";
+            ProductIDLabel.Size = new Size(69, 15);
+            ProductIDLabel.TabIndex = 0;
+            ProductIDLabel.Text = "Product ID :";
             // 
             // dataGridView1
             // 
@@ -431,6 +432,7 @@
             CloseButton.TabIndex = 7;
             CloseButton.Text = "Close";
             CloseButton.UseVisualStyleBackColor = false;
+            CloseButton.Click += CloseButton_Click;
             // 
             // RemoveButton
             // 
@@ -531,6 +533,8 @@
             Controls.Add(panel1);
             Name = "PointOfSaleForm";
             Text = "Point Of Sale";
+            FormClosing += PointOfSaleForm_FormClosing;
+            Load += PointOfSaleForm_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             statusStrip1.ResumeLayout(false);
