@@ -422,6 +422,7 @@
             NewButton.TabIndex = 7;
             NewButton.Text = "New...";
             NewButton.UseVisualStyleBackColor = false;
+            NewButton.Click += NewButton_Click;
             // 
             // CloseButton
             // 

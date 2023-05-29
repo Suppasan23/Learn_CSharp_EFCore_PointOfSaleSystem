@@ -7,11 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Learn_CSharp_EFCore_PointOfSaleSystem.Models.Db;
 
 namespace Learn_CSharp_EFCore_PointOfSaleSystem
 {
     public partial class PointOfSaleForm : Form
     {
+
+        LearnCsharpEfcorePointOfSaleSystemDbContext db = new LearnCsharpEfcorePointOfSaleSystemDbContext();
+
         public PointOfSaleForm()
         {
             InitializeComponent();
@@ -60,6 +64,65 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
 
         }
 
+
+        ///////////////////////////////////////Add New Button///////////////////////////////////////
+        string referenceNo = "";
+
+        private void NewButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if(NewButton.Text.Trim() == "New...")//New...
+                {
+                    NewButton.Text = "Cancel";
+                    GererateCustomSalesID();
+                }
+                else//Cancel
+                {
+                    NewButton.Text = "New...";
+                    TransactionTextBox.Clear();
+                    dataGridView1.Rows.Clear();
+                }
+
+                BarcodeTextBox.Clear();
+                BarcodeTextBox.Focus();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "New Button", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void GererateCustomSalesID()
+        {
+            string currentDate = DateTime.Now.ToString("ddMMyyyy");
+            var group = from s in db.Sales
+                        where s.SaleDate.Value.Year == DateTime.Now.Year
+                        group s by s.SaleDate.Value.Year into g
+                        select new
+                        {
+                            sDate = g.Key,
+                            MaxRefID = g.Max(s => s.SaleReferenceNo)
+                        };
+            if(group != null) 
+            { 
+                if(group.Count() > 0) 
+                {
+                    int conID = group.FirstOrDefault().MaxRefID;
+                    conID += 1;
+                    TransactionTextBox.Text = "Sale" + currentDate + conID.ToString("000000");
+                    referenceNo = Convert.ToString(conID);
+                }
+                else
+                {
+                    int iniID = 1;
+                    TransactionTextBox.Text = "Sale" + currentDate + iniID.ToString("000000");
+                    referenceNo = Convert.ToString(iniID);
+                }
+            }
+        }
+
+
         ///////////////////////////////////////timer1 Tick///////////////////////////////////////
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -93,10 +156,12 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 }
 
             }
-            else 
+            else
             {
                 e.Cancel = false;
             }
         }
+
+
     }
 }
