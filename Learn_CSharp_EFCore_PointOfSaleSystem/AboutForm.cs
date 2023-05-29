@@ -16,5 +16,10 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         {
             InitializeComponent();
         }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", "https://www.facebook.com/suppasan.chaianantakul");
+        }
     }
 }
