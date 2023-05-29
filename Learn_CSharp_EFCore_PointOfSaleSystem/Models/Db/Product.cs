@@ -24,4 +24,6 @@ public partial class Product
     public string? UnitName { get; set; }
 
     public string? Note { get; set; }
+
+    public virtual ICollection<SaleDetail> SaleDetails { get; set; } = new List<SaleDetail>();
 }
