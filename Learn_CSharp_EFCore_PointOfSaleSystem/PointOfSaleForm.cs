@@ -44,10 +44,10 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
 
             StatusStripStatusLabel1.Text = String.Format("Hello, {0}", EmployeeNameTextBox.Text);
 
-            string[] header = new[] { "ID", "Barcode", "product", "Product Name", "Selling Price", "Quantity", "Subtotal" };
+            string[] header = new[] { "ID", "Barcode", "Product Name", "Selling Price", "Quantity", "Subtotal" };
             dataGridView1.ColumnCount = header.Length; //6
 
-            for (var i = 0; i < header.Length; i++)
+            for (var i = 0; i < header.Length - 1; i++)
             {
                 dataGridView1.Columns[i].HeaderText = header[i];
                 dataGridView1.Columns[i].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -167,10 +167,14 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             }
         }
 
-        private void searchProduct(string barcode, bool b)
+        private void searchProduct(string barcode, bool clickWay)
         {
             try
             {
+                if (clickWay == true)
+                {
+                    return;
+                }
 
                 var data = (from i in db.Products
                             where i.ProductBarcode.Trim() == barcode.Trim()
@@ -196,10 +200,15 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     UnitInStockTextBox.Text = Convert.ToString(maxUnit);
 
                     QuantityUpDown.Maximum = maxUnit;
+                    QuantityUpDown.Value = 1;
 
-                    if (maxUnit > 0)
+                    double subTotal = Convert.ToDouble(SellingPriceTextBox.Text) * Convert.ToInt32(QuantityUpDown.Value);
+
+                    if (dataGridView1.Rows.Count == 0)
                     {
-                        QuantityUpDown.Value = 1;
+                        dataGridView1.Rows.Add(ProductIDTextBox.Text, BarcodeShowTextBox.Text, ProductNameTextBox.Text, SellingPriceTextBox.Text, QuantityUpDown.Value.ToString(), subTotal);
+                        calculateTotalAmout();
+                        return;
                     }
 
                 }
@@ -222,11 +231,33 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     return;
                 }
 
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message, "Barcode Search", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        ////////////////////////////////////Calculate total amount////////////////////////////////
+        private void calculateTotalAmout()
+        {
+            try
+            {
+                double amount = 0;
+                for(int i = 0; i <= dataGridView1.Rows.Count - 1; i++) 
+                {
+                    amount += Convert.ToDouble(dataGridView1.Rows[i].Cells[5].Value);
+                }
+
+                TotalAmountTextBox.Text = amount.ToString("##,##0.00");
+
+                BarcodeTextBox.Focus();
+                BarcodeTextBox.Select();
+                BarcodeTextBox.SelectAll();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Calculate amount", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
