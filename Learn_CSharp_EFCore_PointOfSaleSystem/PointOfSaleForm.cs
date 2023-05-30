@@ -72,20 +72,35 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         {
             try
             {
-                if(NewButton.Text.Trim() == "New...")//New...
+                if (NewButton.Text.Trim() == "New...")//New...
                 {
                     NewButton.Text = "Cancel";
                     GererateCustomSalesID();
+                    BarcodeTextBox.Enabled = true;
+                    BarcodeTextBox.ReadOnly = false;
+                    QuantityUpDown.Enabled = true;
+                    QuantityUpDown.ReadOnly = false;
                 }
                 else//Cancel
                 {
                     NewButton.Text = "New...";
                     TransactionTextBox.Clear();
                     dataGridView1.Rows.Clear();
+                    BarcodeTextBox.Enabled = false;
+                    BarcodeTextBox.ReadOnly = true;
+                    QuantityUpDown.Enabled = false;
+                    QuantityUpDown.ReadOnly = true;
+                    ProductIDTextBox.Clear();
+                    BarcodeShowTextBox.Clear();
+                    ProductNameTextBox.Clear();
+                    SellingPriceTextBox.Clear();
+                    UnitInStockTextBox.Clear();
+                    QuantityUpDown.Value = 0;
+                    QuantityUpDown.Maximum = 0;
                 }
-
                 BarcodeTextBox.Clear();
                 BarcodeTextBox.Focus();
+
             }
             catch (Exception ex)
             {
@@ -104,9 +119,9 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                             sDate = g.Key,
                             MaxRefID = g.Max(s => s.SaleReferenceNo)
                         };
-            if(group != null) 
-            { 
-                if(group.Count() > 0) 
+            if (group != null)
+            {
+                if (group.Count() > 0)
                 {
                     int conID = group.FirstOrDefault().MaxRefID;
                     conID += 1;
@@ -119,6 +134,99 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     TransactionTextBox.Text = "Sale" + currentDate + iniID.ToString("000000");
                     referenceNo = Convert.ToString(iniID);
                 }
+            }
+        }
+
+
+        ////////////////////////////////////////Barcode KeyDown///////////////////////////////////
+        private void BarcodeTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    //Disable Windows Sound
+                    e.SuppressKeyPress = true;
+
+                    if (string.IsNullOrEmpty(BarcodeTextBox.Text.Trim()))
+                    {
+                        return;
+                    }
+
+                    if (string.IsNullOrEmpty(TransactionTextBox.Text.Trim()))
+                    {
+                        return;
+                    }
+
+                    searchProduct(BarcodeTextBox.Text.Trim(), false);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Barcode KeyDown", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void searchProduct(string barcode, bool b)
+        {
+            try
+            {
+
+                var data = (from i in db.Products
+                            where i.ProductBarcode.Trim() == barcode.Trim()
+                            select new
+                            {
+                                ProductID = i.ProductId,
+                                ProductBarcode = i.ProductBarcode,
+                                ProductName = i.ProductName,
+                                SellingPrice = i.SellingPrice,
+                                UnitInStock = i.UnitInStock
+                            }).FirstOrDefault();
+
+                if (data != null)//Found
+                {
+                    ProductIDTextBox.Text = Convert.ToString(data.ProductID);
+                    BarcodeShowTextBox.Text = Convert.ToString(data.ProductBarcode);
+                    ProductNameTextBox.Text = Convert.ToString(data.ProductName);
+
+                    double priceFormat = Convert.ToDouble(data.SellingPrice);
+                    SellingPriceTextBox.Text = priceFormat.ToString("##,##0.00");
+
+                    int maxUnit = Convert.ToInt32(data.UnitInStock);
+                    UnitInStockTextBox.Text = Convert.ToString(maxUnit);
+
+                    QuantityUpDown.Maximum = maxUnit;
+
+                    if (maxUnit > 0)
+                    {
+                        QuantityUpDown.Value = 1;
+                    }
+
+                }
+                else//Not found
+                {
+                    ProductIDTextBox.Clear();
+                    BarcodeShowTextBox.Clear();
+                    ProductNameTextBox.Clear();
+                    SellingPriceTextBox.Clear();
+                    UnitInStockTextBox.Clear();
+                    QuantityUpDown.Value = 0;
+                    QuantityUpDown.Maximum = 0;
+
+                    MessageBox.Show("Product not found", "Barcode Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    BarcodeTextBox.Focus();
+                    BarcodeTextBox.Select();
+                    BarcodeTextBox.SelectAll();
+
+                    return;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Barcode Search", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

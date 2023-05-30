@@ -123,6 +123,7 @@
             // 
             // statusStrip1
             // 
+            statusStrip1.ImageScalingSize = new Size(20, 20);
             statusStrip1.Items.AddRange(new ToolStripItem[] { StatusStripStatusLabel1 });
             statusStrip1.Location = new Point(0, 789);
             statusStrip1.Name = "statusStrip1";
@@ -149,8 +150,10 @@
             // 
             BarcodeTextBox.Location = new Point(513, 97);
             BarcodeTextBox.Name = "BarcodeTextBox";
+            BarcodeTextBox.ReadOnly = true;
             BarcodeTextBox.Size = new Size(351, 23);
             BarcodeTextBox.TabIndex = 4;
+            BarcodeTextBox.KeyDown += BarcodeTextBox_KeyDown;
             // 
             // TransactionGroupBox
             // 
@@ -254,6 +257,7 @@
             // 
             CustomerNameTextBox.Location = new Point(127, 50);
             CustomerNameTextBox.Name = "CustomerNameTextBox";
+            CustomerNameTextBox.ReadOnly = true;
             CustomerNameTextBox.Size = new Size(155, 23);
             CustomerNameTextBox.TabIndex = 1;
             // 
@@ -261,6 +265,7 @@
             // 
             CustomerIDTextBox.Location = new Point(127, 20);
             CustomerIDTextBox.Name = "CustomerIDTextBox";
+            CustomerIDTextBox.ReadOnly = true;
             CustomerIDTextBox.Size = new Size(155, 23);
             CustomerIDTextBox.TabIndex = 1;
             // 
@@ -307,6 +312,7 @@
             // 
             QuantityUpDown.Location = new Point(672, 52);
             QuantityUpDown.Name = "QuantityUpDown";
+            QuantityUpDown.ReadOnly = true;
             QuantityUpDown.Size = new Size(165, 23);
             QuantityUpDown.TabIndex = 2;
             // 
@@ -409,6 +415,7 @@
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Location = new Point(12, 311);
             dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowHeadersWidth = 51;
             dataGridView1.RowTemplate.Height = 25;
             dataGridView1.Size = new Size(852, 475);
             dataGridView1.TabIndex = 6;
