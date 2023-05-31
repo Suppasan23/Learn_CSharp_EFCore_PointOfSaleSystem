@@ -109,6 +109,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             }
         }
 
+        ///////////////////////////////////////Gererate Sale ID///////////////////////////////////////
         private void GererateCustomSalesID()
         {
             string currentDate = DateTime.Now.ToString("ddMMyyyy");
@@ -248,6 +249,8 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                         BarcodeTextBox.Clear();
                         BarcodeTextBox.Focus();
                     }
+
+                    dataGridView1.Rows[dataGridView1.Rows.Count - 1].Selected = true; //Selected last row
 
                 }
                 else//Not found
