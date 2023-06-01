@@ -62,7 +62,6 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             dataGridView1.Columns[3].Width = 165;
             dataGridView1.Columns[4].Width = 100;
             dataGridView1.Columns[5].Width = 150;
-
         }
 
 
@@ -160,7 +159,8 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                         return;
                     }
 
-                    searchProduct(BarcodeTextBox.Text.Trim(), false);
+                    searchProduct(BarcodeTextBox.Text.Trim());
+                    addProduct();
                 }
             }
             catch (Exception ex)
@@ -169,16 +169,31 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             }
         }
 
-        ////////////////////////////////////////Add Product///////////////////////////////////
-        private void searchProduct(string barcode, bool clickWay)
+        ////////////////////////////////////////dataGridView1 Selection Change///////////////////////////////////
+
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count != 0)
+            {
+                DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
+                var barcode = Convert.ToString(selectedRow.Cells[1].Value);
+                if(barcode != null)
+                {
+                    searchProduct(barcode);
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
+
+
+        ////////////////////////////////////////Search Product and Show to textBox///////////////////////////////////
+        private void searchProduct(string barcode)
         {
             try
             {
-                //if (clickWay == true)
-                //{
-                //    return;
-                //}
-
                 var data = (from i in db.Products
                             where i.ProductBarcode.Trim() == barcode.Trim()
                             select new
@@ -203,54 +218,17 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     UnitInStockTextBox.Text = Convert.ToString(maxUnit);
 
                     QuantityUpDown.Maximum = maxUnit;
-                    QuantityUpDown.Value = 1;
 
-                    int barcodeExist = -1;
 
-                    for (int i = 0; i < dataGridView1.Rows.Count; i++) // Loop to find exist barcode
+                    foreach(DataGridViewRow row in dataGridView1.Rows)
                     {
-                        if (dataGridView1.Rows[i].Cells[1].Value != null && dataGridView1.Rows[i].Cells[1].Value.ToString() == BarcodeShowTextBox.Text.Trim())
+                        if (row.Cells[1].Value.ToString() != null && row.Cells[1].Value.ToString() == BarcodeShowTextBox.Text.Trim())
                         {
-                            barcodeExist = i;
-                            break;
+
                         }
                     }
 
-                    if (barcodeExist < 0) // Barcode not exists
-                    {
-                        double subTotal = 0;
-                        double price = Convert.ToDouble(SellingPriceTextBox.Text.Trim());
-                        int qty = Convert.ToInt32(QuantityUpDown.Value);
-
-                        subTotal = price * qty;
-
-                        dataGridView1.Rows.Add(ProductIDTextBox.Text, BarcodeShowTextBox.Text, ProductNameTextBox.Text, price, qty, subTotal);
-
-                        calculateTotalAmount();
-
-                        BarcodeTextBox.Clear();
-                        BarcodeTextBox.Focus();
-                    }
-                    else // Barcode exists
-                    {
-                        double subTotal = 0;
-                        double price = Convert.ToDouble(dataGridView1.Rows[barcodeExist].Cells[3].Value);
-                        int qty = Convert.ToInt32(dataGridView1.Rows[barcodeExist].Cells[4].Value);
-
-                        qty += 1;
-
-                        subTotal = price * qty;
-
-                        dataGridView1.Rows[barcodeExist].Cells[4].Value = qty;
-                        dataGridView1.Rows[barcodeExist].Cells[5].Value = subTotal;
-
-                        calculateTotalAmount();
-
-                        BarcodeTextBox.Clear();
-                        BarcodeTextBox.Focus();
-                    }
-
-                    dataGridView1.Rows[dataGridView1.Rows.Count - 1].Selected = true; //Selected last row
+                    QuantityUpDown.Value = 1;
 
                 }
                 else//Not found
@@ -268,14 +246,72 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     BarcodeTextBox.Focus();
                     BarcodeTextBox.Select();
                     BarcodeTextBox.SelectAll();
-
                     return;
                 }
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message, "Barcode Search", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        ////////////////////////////////////////Add product to DataGridView///////////////////////////////////
+        private void addProduct()
+        {
+            try
+            {
+                int barcodeExist = -1;
+
+                for (int i = 0; i < dataGridView1.Rows.Count; i++) // Loop to find exist barcode
+                {
+                    if (dataGridView1.Rows[i].Cells[1].Value != null && dataGridView1.Rows[i].Cells[1].Value.ToString() == BarcodeShowTextBox.Text.Trim())
+                    {
+                        barcodeExist = i;
+                        break;
+                    }
+                }
+
+                if (barcodeExist < 0) // Barcode not exists : Add new row
+                {
+                    double subTotal = 0;
+                    double price = Convert.ToDouble(SellingPriceTextBox.Text.Trim());
+                    int qty = Convert.ToInt32(QuantityUpDown.Value);
+
+                    subTotal = price * qty;
+
+                    dataGridView1.Rows.Add(ProductIDTextBox.Text, BarcodeShowTextBox.Text, ProductNameTextBox.Text, price, qty, subTotal);
+
+                    calculateTotalAmount();
+
+                    BarcodeTextBox.Clear();
+                    BarcodeTextBox.Focus();
+                }
+                else // Barcode exists : Stack existing row
+                {
+                    double subTotal = 0;
+                    double price = Convert.ToDouble(dataGridView1.Rows[barcodeExist].Cells[3].Value);
+                    int qty = Convert.ToInt32(dataGridView1.Rows[barcodeExist].Cells[4].Value);
+
+                    qty += 1;
+
+                    subTotal = price * qty;
+
+                    dataGridView1.Rows[barcodeExist].Cells[4].Value = qty;
+                    dataGridView1.Rows[barcodeExist].Cells[5].Value = subTotal;
+
+                    calculateTotalAmount();
+
+                    BarcodeTextBox.Clear();
+                    BarcodeTextBox.Focus();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Product add", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                dataGridView1.Rows[dataGridView1.Rows.Count - 1].Selected = true; //Selected last row
             }
         }
 
@@ -341,5 +377,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 e.Cancel = false;
             }
         }
+
+
     }
 }
