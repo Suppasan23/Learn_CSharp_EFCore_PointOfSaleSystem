@@ -22,6 +22,25 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             InitializeComponent();
             timer1.Enabled = true;
             timer1.Interval = 1000;
+
+            NewButton.Text = "New...";
+            TransactionTextBox.Clear();
+            dataGridView1.Rows.Clear();
+            BarcodeTextBox.Enabled = false;
+            BarcodeTextBox.ReadOnly = true;
+            QuantityUpDown.Enabled = false;
+            QuantityUpDown.ReadOnly = true;
+            ProductIDTextBox.Clear();
+            BarcodeShowTextBox.Clear();
+            ProductNameTextBox.Clear();
+            SellingPriceTextBox.Clear();
+            UnitInStockTextBox.Clear();
+            QuantityUpDown.Maximum = 1000;
+            QuantityUpDown.Value = 0;
+            TotalAmountTextBox.Clear();
+            TenderedTextBox.Clear();
+            ChangeTextBox.Clear();
+
             dataGridView1.ReadOnly = true;
             dataGridView1.MultiSelect = false;
             dataGridView1.AllowUserToAddRows = false;
@@ -77,10 +96,21 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 {
                     NewButton.Text = "Cancel";
                     GererateCustomSalesID();
+                    dataGridView1.Rows.Clear();
                     BarcodeTextBox.Enabled = true;
                     BarcodeTextBox.ReadOnly = false;
-                    QuantityUpDown.Enabled = true;
-                    QuantityUpDown.ReadOnly = false;
+                    QuantityUpDown.Enabled = false;
+                    QuantityUpDown.ReadOnly = true;
+                    ProductIDTextBox.Clear();
+                    BarcodeShowTextBox.Clear();
+                    ProductNameTextBox.Clear();
+                    SellingPriceTextBox.Clear();
+                    UnitInStockTextBox.Clear();
+                    QuantityUpDown.Maximum = 1000;
+                    QuantityUpDown.Value = 0;
+                    TotalAmountTextBox.Clear();
+                    TenderedTextBox.Clear();
+                    ChangeTextBox.Clear();
                 }
                 else//Cancel
                 {
@@ -96,8 +126,12 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     ProductNameTextBox.Clear();
                     SellingPriceTextBox.Clear();
                     UnitInStockTextBox.Clear();
+                    QuantityUpDown.Maximum = 1000;
                     QuantityUpDown.Value = 0;
-                    QuantityUpDown.Maximum = 0;
+                    TotalAmountTextBox.Clear();
+                    TenderedTextBox.Clear();
+                    ChangeTextBox.Clear();
+
                 }
                 BarcodeTextBox.Clear();
                 BarcodeTextBox.Focus();
@@ -139,6 +173,37 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             }
         }
 
+        ////////////////////////////////////////////Calculate total amount///////////////////////////////////////
+        private void calculateTotalAmount()
+        {
+            try
+            {
+                if (dataGridView1.Rows.Count > 0)
+                {
+                    double amount = 0;
+
+                    for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                    {
+                        amount += Convert.ToDouble(dataGridView1.Rows[i].Cells[6].Value);
+                    }
+
+                    TotalAmountTextBox.Text = amount.ToString("##,##0.00");
+                }
+                else
+                {
+                    TotalAmountTextBox.Clear();
+                    TenderedTextBox.Clear();
+                    ChangeTextBox.Clear();
+                    return;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Calculate amount", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         ////////////////////////////////////////Barcode Serach KeyDown///////////////////////////////////
         private void BarcodeTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -172,10 +237,50 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         ////////////////////////////////////////dataGridView1 Selection Change///////////////////////////////////
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count != 0)
+            if (dataGridView1.Rows.Count > 0)
             {
-                DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
-                searchProduct(selectedRow);
+                if (dataGridView1.SelectedRows.Count > 0)
+                {
+                    DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
+                    searchProduct(selectedRow);
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                ProductIDTextBox.Clear();
+                BarcodeShowTextBox.Clear();
+                ProductNameTextBox.Clear();
+                UnitInStockTextBox.Clear();
+                SellingPriceTextBox.Clear();
+                QuantityUpDown.Value = 0;
+                QuantityUpDown.Enabled = false;
+                QuantityUpDown.ReadOnly = true;
+            }
+        }
+
+        ////////////////////////////////////////Show Product List to textBox///////////////////////////////////
+        private void searchProduct(DataGridViewRow receiveSelectedRow)
+        {
+            try
+            {
+                // ID, Barcode, Product Name, UnitInStock, Selling Price, "Quantity", "Subtotal"
+
+                ProductIDTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[0].Value);
+                BarcodeShowTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[1].Value);
+                ProductNameTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[2].Value);
+                UnitInStockTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[3].Value);
+                SellingPriceTextBox.Text = Convert.ToDouble(receiveSelectedRow.Cells[4].Value).ToString("##,##0.00");
+                QuantityUpDown.Value = Convert.ToInt32(receiveSelectedRow.Cells[5].Value);
+                QuantityUpDown.Enabled = true;
+                QuantityUpDown.ReadOnly = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Barcode Search", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -248,12 +353,10 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     return;
                 }
             }
-
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message, "Product add", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
             finally
             {
                 calculateTotalAmount();
@@ -261,26 +364,6 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 BarcodeTextBox.Focus();
             }
 
-        }
-
-        ////////////////////////////////////////Show Product List to textBox///////////////////////////////////
-        private void searchProduct(DataGridViewRow receiveSelectedRow)
-        {
-            try
-            {
-                // ID, Barcode, Product Name, UnitInStock, Selling Price, "Quantity", "Subtotal"
-
-                ProductIDTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[0].Value);
-                BarcodeShowTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[1].Value);
-                ProductNameTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[2].Value);
-                UnitInStockTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[3].Value);
-                SellingPriceTextBox.Text = Convert.ToDouble(receiveSelectedRow.Cells[4].Value).ToString("##,##0.00");
-                QuantityUpDown.Value = Convert.ToInt32(receiveSelectedRow.Cells[5].Value);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message, "Barcode Search", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         ////////////////////////////////////Numneric Updown Value Change////////////////////////////////
@@ -309,10 +392,9 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                         double subTotal = price * qty;
 
                         selectedRow.Cells[5].Value = qty;
-                        selectedRow.Cells[6].Value = subTotal;
+                        selectedRow.Cells[6].Value = subTotal.ToString("##,##0.00");
                         selectedRow.Selected = false; //Deselected existing row
                         selectedRow.Selected = true; //Selected existing row
-
                     }
                     else
                     {
@@ -335,26 +417,38 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             }
         }
 
-        ////////////////////////////////////Calculate total amount////////////////////////////////
-        private void calculateTotalAmount()
+        ////////////////////////////////////////////Remove Button///////////////////////////////////////////////
+        private void RemoveButton_Click(object sender, EventArgs e)
         {
             try
             {
-                double amount = 0;
-                for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                if (dataGridView1.SelectedRows.Count != 0 && !string.IsNullOrEmpty(BarcodeShowTextBox.Text.Trim()))
                 {
-                    amount += Convert.ToDouble(dataGridView1.Rows[i].Cells[6].Value);
+                    DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
+
+                    if (Convert.ToString(selectedRow.Cells[1].Value) == BarcodeShowTextBox.Text.Trim())
+                    {
+                        dataGridView1.Rows.RemoveAt(selectedRow.Index);
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
-
-                TotalAmountTextBox.Text = amount.ToString("##,##0.00");
-
-                BarcodeTextBox.Focus();
-                BarcodeTextBox.Select();
-                BarcodeTextBox.SelectAll();
+                else
+                {
+                    return;
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message, "Calculate amount", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error: " + ex.Message, "Delete product", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                calculateTotalAmount();
+                BarcodeTextBox.Clear();
+                BarcodeTextBox.Focus();
             }
         }
 

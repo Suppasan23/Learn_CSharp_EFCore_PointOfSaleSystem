@@ -454,6 +454,7 @@
             RemoveButton.TabIndex = 7;
             RemoveButton.Text = "Remove";
             RemoveButton.UseVisualStyleBackColor = false;
+            RemoveButton.Click += RemoveButton_Click;
             // 
             // SaveButton
             // 
@@ -494,29 +495,32 @@
             // 
             // TotalAmountTextBox
             // 
+            TotalAmountTextBox.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
             TotalAmountTextBox.Location = new Point(872, 329);
-            TotalAmountTextBox.Multiline = true;
             TotalAmountTextBox.Name = "TotalAmountTextBox";
             TotalAmountTextBox.ReadOnly = true;
-            TotalAmountTextBox.Size = new Size(155, 47);
+            TotalAmountTextBox.Size = new Size(155, 35);
             TotalAmountTextBox.TabIndex = 9;
+            TotalAmountTextBox.TextAlign = HorizontalAlignment.Right;
             // 
             // TenderedTextBox
             // 
+            TenderedTextBox.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
             TenderedTextBox.Location = new Point(872, 428);
-            TenderedTextBox.Multiline = true;
             TenderedTextBox.Name = "TenderedTextBox";
-            TenderedTextBox.Size = new Size(155, 47);
+            TenderedTextBox.Size = new Size(155, 35);
             TenderedTextBox.TabIndex = 9;
+            TenderedTextBox.TextAlign = HorizontalAlignment.Right;
             // 
             // ChangeTextBox
             // 
+            ChangeTextBox.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
             ChangeTextBox.Location = new Point(872, 527);
-            ChangeTextBox.Multiline = true;
             ChangeTextBox.Name = "ChangeTextBox";
             ChangeTextBox.ReadOnly = true;
-            ChangeTextBox.Size = new Size(155, 47);
+            ChangeTextBox.Size = new Size(155, 35);
             ChangeTextBox.TabIndex = 9;
+            ChangeTextBox.TextAlign = HorizontalAlignment.Right;
             // 
             // PointOfSaleForm
             // 
