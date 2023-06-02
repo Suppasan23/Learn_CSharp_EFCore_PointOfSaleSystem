@@ -31,7 +31,6 @@ public partial class LearnCsharpEfcorePointOfSaleSystemDbContext : DbContext
             optionsBuilder.UseSqlServer(System.Configuration.ConfigurationManager.ConnectionStrings["conStr"].ConnectionString);
         }
     }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Product>(entity =>

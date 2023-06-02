@@ -237,7 +237,6 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                         dataGridView1.Rows[barcodeExist].Cells[6].Value = subTotal.ToString("##,##0.00");
                         dataGridView1.Rows[barcodeExist].Selected = false; //Deselected existing row
                         dataGridView1.Rows[barcodeExist].Selected = true; //Selected existing row
-
                     }
                 }
                 else//Not found
@@ -271,16 +270,68 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             {
                 // ID, Barcode, Product Name, UnitInStock, Selling Price, "Quantity", "Subtotal"
 
-                    ProductIDTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[0].Value);
-                    BarcodeShowTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[1].Value);
-                    ProductNameTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[2].Value);
-                    UnitInStockTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[3].Value);
-                    SellingPriceTextBox.Text = Convert.ToDouble(receiveSelectedRow.Cells[4].Value).ToString("##,##0.00");
-                    QuantityUpDown.Value = Convert.ToInt32(receiveSelectedRow.Cells[5].Value);
+                ProductIDTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[0].Value);
+                BarcodeShowTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[1].Value);
+                ProductNameTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[2].Value);
+                UnitInStockTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[3].Value);
+                SellingPriceTextBox.Text = Convert.ToDouble(receiveSelectedRow.Cells[4].Value).ToString("##,##0.00");
+                QuantityUpDown.Value = Convert.ToInt32(receiveSelectedRow.Cells[5].Value);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message, "Barcode Search", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        ////////////////////////////////////Numneric Updown Value Change////////////////////////////////
+        private void QuantityUpDown_KeyUp(object sender, KeyEventArgs e)
+        {
+            QuantityUpDownValueChanged();
+        }
+        private void QuantityUpDown_MouseUp(object sender, MouseEventArgs e)
+        {
+            QuantityUpDownValueChanged();
+        }
+
+        private void QuantityUpDownValueChanged()
+        {
+            try
+            {
+                if (dataGridView1.SelectedRows.Count != 0 && !string.IsNullOrEmpty(BarcodeShowTextBox.Text.Trim()))
+                {
+                    DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
+
+                    if (Convert.ToString(selectedRow.Cells[1].Value) == BarcodeShowTextBox.Text.Trim())
+                    {
+                        double price = Convert.ToDouble(selectedRow.Cells[4].Value);
+                        int qty = Convert.ToInt32(QuantityUpDown.Value);
+
+                        double subTotal = price * qty;
+
+                        selectedRow.Cells[5].Value = qty;
+                        selectedRow.Cells[6].Value = subTotal;
+                        selectedRow.Selected = false; //Deselected existing row
+                        selectedRow.Selected = true; //Selected existing row
+
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Quantity Up-Down", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                calculateTotalAmount();
+                QuantityUpDown.Focus();
             }
         }
 

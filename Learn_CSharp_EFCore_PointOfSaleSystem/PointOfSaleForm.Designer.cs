@@ -315,6 +315,8 @@
             QuantityUpDown.ReadOnly = true;
             QuantityUpDown.Size = new Size(165, 23);
             QuantityUpDown.TabIndex = 2;
+            QuantityUpDown.KeyUp += QuantityUpDown_KeyUp;
+            QuantityUpDown.MouseUp += QuantityUpDown_MouseUp;
             // 
             // SellingPriceTextBox
             // 
