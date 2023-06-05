@@ -53,6 +53,8 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         ///////////////////////////////////////////// Load Data /////////////////////////////////////////////
         private void loadData(string strKeyword)
         {
+
+
             var data = from i in db.Products
                        where i.ProductBarcode.Contains(strKeyword) || i.ProductName.Contains(strKeyword)
                        select new

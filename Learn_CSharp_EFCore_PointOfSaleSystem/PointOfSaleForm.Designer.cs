@@ -470,6 +470,7 @@
             SaveButton.Text = "Save";
             SaveButton.UseVisualStyleBackColor = false;
             SaveButton.Click += SaveButton_Click;
+            SaveButton.KeyDown += SaveButton_KeyDown;
             // 
             // TotalAmountLabel
             // 

@@ -50,7 +50,6 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             ChangeTextBox.ReadOnly = true;
             SaveButton.Enabled = false;
             SaveButton.BackColor = Color.DarkGray;
-            center.readyToSave = false;
 
             dataGridView1.ReadOnly = true;
             dataGridView1.MultiSelect = false;
@@ -540,6 +539,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 ChangeTextBox.Text = (changeMoney).ToString("#,###,##0");
                 SaveButton.BackColor = Color.LimeGreen;
                 SaveButton.Enabled = true;
+                SaveButton.Focus();
             }
             else
             {
@@ -551,33 +551,89 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         }
 
 
-        ///////////////////////////////////////Save Button Click///////////////////////////////////////
+        ///////////////////////////////////////Save Button Click & Enter///////////////////////////////////////
+
+        private void SaveButton_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                saveData();
+            }
+        }
+
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            if(SaveButton.Enabled == true)
+            saveData();
+        }
+
+        private void saveData()
+        {
+            if (SaveButton.Enabled == true)
             {
-                DataGridView theSaleData = dataGridView1;
-
-                using(var tr = db.Database.BeginTransaction())
+                using (var tr = db.Database.BeginTransaction())
                 {
-
                     try
-                    {   
-                        center.saleReceiptID = TransactionTextBox.Text.Trim();
-                        center.saleReferenceNo = Convert.ToInt32(referenceNo);
-                        center.employeeID = Convert.ToInt32(EmployeeIDTextBox.Text.Trim());
-                        center.customerID = Convert.ToInt32(CustomerIDTextBox.Text.Trim());
-
-                        double total = Convert.ToDouble(TotalAmountTextBox.Text.Trim());
-                        double tendered = Convert.ToDouble(TenderedTextBox.Text.Trim());
-                        double change = Convert.ToDouble(ChangeTextBox.Text.Trim());
-
+                    {
                         DialogResult result;
-                        result = MessageBox.Show("Do you want to continu?", "Save data", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        result = MessageBox.Show("Do you want to continue?", "Save data", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                         if (result == DialogResult.Yes)
                         {
-                            
+                            //Add data to "Sale" table
+                            center.saleReceiptID = TransactionTextBox.Text.Trim();
+                            center.saleReferenceNo = Convert.ToInt32(referenceNo);
+                            center.employeeID = Convert.ToInt32(EmployeeIDTextBox.Text.Trim());
+                            center.customerID = Convert.ToInt32(CustomerIDTextBox.Text.Trim());
+                            decimal total = Convert.ToDecimal(TotalAmountTextBox.Text.Trim());
+                            decimal tendered = Convert.ToDecimal(TenderedTextBox.Text.Trim());
+                            decimal change = Convert.ToDecimal(ChangeTextBox.Text.Trim());
+
+                            Sale saleReceipt = new Sale();
+
+                            saleReceipt.SaleId = center.saleReceiptID;
+                            saleReceipt.SaleReferenceNo = center.saleReferenceNo;
+                            saleReceipt.EmployeeId = center.employeeID;
+                            saleReceipt.CustomerId = center.customerID;
+                            saleReceipt.SaleTotal = total;
+                            saleReceipt.SaleReceive = tendered;
+                            saleReceipt.SaleChange = change;
+
+                            db.Sales.Add(saleReceipt);
+
+
+                            //Add data to "SaleDetail" table
+                            foreach (DataGridViewRow row in dataGridView1.Rows)
+                            {
+                                int proID = Convert.ToInt32(row.Cells[0].Value.ToString());
+                                string proBarcode = row.Cells[1].Value?.ToString() ?? "unknow";
+                                string proName = row.Cells[2].Value?.ToString() ?? "unknow";
+                                decimal proPrice = Convert.ToDecimal(row.Cells[4].Value.ToString());
+                                int proQuantity = Convert.ToInt32(row.Cells[5].Value.ToString());
+                                decimal proSubtotal = Convert.ToDecimal(row.Cells[6].Value.ToString());
+
+                                SaleDetail saleDetail = new SaleDetail();
+
+                                saleDetail.SaleId = center.saleReceiptID;
+                                saleDetail.ProductId = proID;
+                                saleDetail.ProductName = proName;
+                                saleDetail.ProductPrice = proPrice;
+                                saleDetail.ProductQuantity = proQuantity;
+                                saleDetail.SubTotal = proSubtotal;
+
+                                cutStock(saleDetail);
+                                db.SaleDetails.Add(saleDetail);
+                            }
+
+                            db.SaveChanges();
+                            tr.Commit();
+
+                            MessageBox.Show("Saved successfully!", "Save data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            NewButton.PerformClick();
+                        }
+                        else
+                        {
+                            return;
                         }
 
                     }
@@ -591,6 +647,25 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             {
                 return;
             }
+        }
+
+
+
+        ///////////////////////////////////////Cut stock methode//////////////////////////////////////////////
+        private void cutStock(SaleDetail receiveSaleDetail)
+        {
+            var proData = (from p in db.Products
+                           where p.ProductId == receiveSaleDetail.ProductId
+                           select p).FirstOrDefault();
+            if (proData != null)
+            {
+                proData.UnitInStock = proData.UnitInStock - receiveSaleDetail.ProductQuantity;
+            }
+            else
+            {
+                return;
+            }
+
         }
 
 
@@ -626,7 +701,6 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 {
                     e.Cancel = true;
                 }
-
             }
             else
             {
