@@ -30,19 +30,27 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             BarcodeTextBox.ReadOnly = true;
             QuantityUpDown.Enabled = false;
             QuantityUpDown.ReadOnly = true;
-            ProductIDTextBox.Clear();
-            BarcodeShowTextBox.Clear();
-            ProductNameTextBox.Clear();
-            SellingPriceTextBox.Clear();
-            UnitInStockTextBox.Clear();
             QuantityUpDown.Maximum = 1000;
             QuantityUpDown.Value = 0;
+            ProductIDTextBox.Clear();
+            ProductIDTextBox.ReadOnly = true;
+            BarcodeShowTextBox.Clear();
+            BarcodeShowTextBox.ReadOnly = true;
+            ProductNameTextBox.Clear();
+            ProductNameTextBox.ReadOnly = true;
+            SellingPriceTextBox.Clear();
+            SellingPriceTextBox.ReadOnly = true;
+            UnitInStockTextBox.Clear();
+            UnitInStockTextBox.ReadOnly = true;
             TotalAmountTextBox.Clear();
+            TotalAmountTextBox.ReadOnly = true;
             TenderedTextBox.Clear();
-            TenderedTextBox.ForeColor = Color.Black;
+            TenderedTextBox.ReadOnly = true;
             ChangeTextBox.Clear();
+            ChangeTextBox.ReadOnly = true;
             SaveButton.Enabled = false;
             SaveButton.BackColor = Color.DarkGray;
+            center.readyToSave = false;
 
             dataGridView1.ReadOnly = true;
             dataGridView1.MultiSelect = false;
@@ -104,16 +112,24 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     BarcodeTextBox.ReadOnly = false;
                     QuantityUpDown.Enabled = false;
                     QuantityUpDown.ReadOnly = true;
-                    ProductIDTextBox.Clear();
-                    BarcodeShowTextBox.Clear();
-                    ProductNameTextBox.Clear();
-                    SellingPriceTextBox.Clear();
-                    UnitInStockTextBox.Clear();
                     QuantityUpDown.Maximum = 1000;
                     QuantityUpDown.Value = 0;
+                    ProductIDTextBox.Clear();
+                    ProductIDTextBox.ReadOnly = true;
+                    BarcodeShowTextBox.Clear();
+                    BarcodeShowTextBox.ReadOnly = true;
+                    ProductNameTextBox.Clear();
+                    ProductNameTextBox.ReadOnly = true;
+                    SellingPriceTextBox.Clear();
+                    SellingPriceTextBox.ReadOnly = true;
+                    UnitInStockTextBox.Clear();
+                    UnitInStockTextBox.ReadOnly = true;
                     TotalAmountTextBox.Clear();
+                    TotalAmountTextBox.ReadOnly = true;
                     TenderedTextBox.Clear();
+                    TenderedTextBox.ReadOnly = true;
                     ChangeTextBox.Clear();
+                    ChangeTextBox.ReadOnly = true;
                     SaveButton.Enabled = false;
                     SaveButton.BackColor = Color.DarkGray;
                 }
@@ -126,20 +142,26 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     BarcodeTextBox.ReadOnly = true;
                     QuantityUpDown.Enabled = false;
                     QuantityUpDown.ReadOnly = true;
-                    ProductIDTextBox.Clear();
-                    BarcodeShowTextBox.Clear();
-                    ProductNameTextBox.Clear();
-                    SellingPriceTextBox.Clear();
-                    UnitInStockTextBox.Clear();
                     QuantityUpDown.Maximum = 1000;
                     QuantityUpDown.Value = 0;
+                    ProductIDTextBox.Clear();
+                    ProductIDTextBox.ReadOnly = true;
+                    BarcodeShowTextBox.Clear();
+                    BarcodeShowTextBox.ReadOnly = true;
+                    ProductNameTextBox.Clear();
+                    ProductNameTextBox.ReadOnly = true;
+                    SellingPriceTextBox.Clear();
+                    SellingPriceTextBox.ReadOnly = true;
+                    UnitInStockTextBox.Clear();
+                    UnitInStockTextBox.ReadOnly = true;
                     TotalAmountTextBox.Clear();
+                    TotalAmountTextBox.ReadOnly = true;
                     TenderedTextBox.Clear();
-                    TenderedTextBox.ForeColor = Color.Black;
+                    TenderedTextBox.ReadOnly = true;
                     ChangeTextBox.Clear();
+                    ChangeTextBox.ReadOnly = true;
                     SaveButton.Enabled = false;
                     SaveButton.BackColor = Color.DarkGray;
-
                 }
                 BarcodeTextBox.Clear();
                 BarcodeTextBox.Focus();
@@ -195,7 +217,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                         amount += Convert.ToDouble(dataGridView1.Rows[i].Cells[6].Value);
                     }
 
-                    TotalAmountTextBox.Text = amount.ToString("##,##0.00");
+                    TotalAmountTextBox.Text = amount.ToString("#,###,##0");
                 }
                 else
                 {
@@ -261,6 +283,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 ProductNameTextBox.Clear();
                 UnitInStockTextBox.Clear();
                 SellingPriceTextBox.Clear();
+
                 QuantityUpDown.Value = 0;
                 QuantityUpDown.Enabled = false;
                 QuantityUpDown.ReadOnly = true;
@@ -278,7 +301,8 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 BarcodeShowTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[1].Value);
                 ProductNameTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[2].Value);
                 UnitInStockTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[3].Value);
-                SellingPriceTextBox.Text = Convert.ToDouble(receiveSelectedRow.Cells[4].Value).ToString("##,##0.00");
+                SellingPriceTextBox.Text = Convert.ToDouble(receiveSelectedRow.Cells[4].Value).ToString("#,###,##0");
+
                 QuantityUpDown.Value = Convert.ToInt32(receiveSelectedRow.Cells[5].Value);
                 QuantityUpDown.Enabled = true;
                 QuantityUpDown.ReadOnly = false;
@@ -330,7 +354,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
 
                         double subTotal = price * qty;
 
-                        dataGridView1.Rows.Add(id, showBarcode, productName, maxUnit, price.ToString("##,##0.00"), qty, subTotal.ToString("##,##0.00"));
+                        dataGridView1.Rows.Add(id, showBarcode, productName, maxUnit, price.ToString("#,###,##0"), qty, subTotal.ToString("#,###,##0"));
                         dataGridView1.ClearSelection(); //Selected no row
                         dataGridView1.Rows[dataGridView1.Rows.Count - 1].Selected = true; //Selected last row
                     }
@@ -344,7 +368,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                         double subTotal = price * qty;
 
                         dataGridView1.Rows[barcodeExist].Cells[5].Value = qty;
-                        dataGridView1.Rows[barcodeExist].Cells[6].Value = subTotal.ToString("##,##0.00");
+                        dataGridView1.Rows[barcodeExist].Cells[6].Value = subTotal.ToString("#,###,##0");
                         dataGridView1.ClearSelection(); //Selected no row
                         dataGridView1.Rows[barcodeExist].Selected = true; //Selected existing row
                     }
@@ -352,9 +376,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 else//Not found
                 {
                     MessageBox.Show("Product not found", "Barcode Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    BarcodeTextBox.Focus();
-                    BarcodeTextBox.Select();
-                    BarcodeTextBox.SelectAll();
+                    center.focusTecxbox(BarcodeTextBox);
                     return;
                 }
             }
@@ -396,7 +418,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                         double subTotal = price * qty;
 
                         selectedRow.Cells[5].Value = qty;
-                        selectedRow.Cells[6].Value = subTotal.ToString("##,##0.00");
+                        selectedRow.Cells[6].Value = subTotal.ToString("#,###,##0");
                         selectedRow.Selected = true; //Selected existing row
                     }
                     else
@@ -451,11 +473,24 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             }
             finally
             {
-                calculateTenderedAndChange(-1);
                 calculateTotalAmount();
                 BarcodeTextBox.Clear();
                 BarcodeTextBox.Focus();
             }
+        }
+
+        ///////////////////////////////////////TotalAmountTextBox has change///////////////////////////////////////
+        private void TotalAmountTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TotalAmountTextBox.Text))
+            {
+                TenderedTextBox.ReadOnly = false;
+            }
+            else
+            {
+                TenderedTextBox.ReadOnly = true;
+            }
+            resetTenderedAndChange(-1);
         }
 
         ///////////////////////////////////////Tendered Keydown///////////////////////////////////////
@@ -467,28 +502,27 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 {
                     if (double.TryParse(TotalAmountTextBox.Text.Trim(), out double totalAmount) && double.TryParse(TenderedTextBox.Text.Trim(), out double tenderedMoney))
                     {
-                        if(tenderedMoney >= totalAmount)
+                        if (tenderedMoney >= totalAmount)
                         {
                             //Disable Windows Sound
                             e.SuppressKeyPress = true;
-
-                            calculateTenderedAndChange(tenderedMoney - totalAmount);
+                            resetTenderedAndChange(tenderedMoney - totalAmount);
                         }
                         else
                         {
-                            calculateTenderedAndChange(-1);
+                            resetTenderedAndChange(-1);
                             return;
                         }
                     }
                     else
                     {
-                        calculateTenderedAndChange(-1);
+                        resetTenderedAndChange(-1);
                         return;
                     }
                 }
                 else
                 {
-                    calculateTenderedAndChange(-1);
+                    resetTenderedAndChange(-1);
                     return;
                 }
             }
@@ -499,24 +533,69 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         }
 
         ///////////////////////////////////////Show tendered and change///////////////////////////////////////
-        private void calculateTenderedAndChange(double changeMoney)
+        private void resetTenderedAndChange(double changeMoney)
         {
-            if(changeMoney >= 0)
+            if (changeMoney >= 0)
             {
-                ChangeTextBox.Text = (changeMoney).ToString("##,##0.00");
-                SaveButton.Enabled = true;
+                ChangeTextBox.Text = (changeMoney).ToString("#,###,##0");
                 SaveButton.BackColor = Color.LimeGreen;
+                SaveButton.Enabled = true;
             }
             else
             {
                 TenderedTextBox.Clear();
                 ChangeTextBox.Clear();
-                SaveButton.Enabled = false;
                 SaveButton.BackColor = Color.DarkGray;
+                SaveButton.Enabled = false;
             }
         }
 
-        ///////////////////////////////////////timer1 Tick///////////////////////////////////////
+
+        ///////////////////////////////////////Save Button Click///////////////////////////////////////
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            if(SaveButton.Enabled == true)
+            {
+                DataGridView theSaleData = dataGridView1;
+
+                using(var tr = db.Database.BeginTransaction())
+                {
+
+                    try
+                    {   
+                        center.saleReceiptID = TransactionTextBox.Text.Trim();
+                        center.saleReferenceNo = Convert.ToInt32(referenceNo);
+                        center.employeeID = Convert.ToInt32(EmployeeIDTextBox.Text.Trim());
+                        center.customerID = Convert.ToInt32(CustomerIDTextBox.Text.Trim());
+
+                        double total = Convert.ToDouble(TotalAmountTextBox.Text.Trim());
+                        double tendered = Convert.ToDouble(TenderedTextBox.Text.Trim());
+                        double change = Convert.ToDouble(ChangeTextBox.Text.Trim());
+
+                        DialogResult result;
+                        result = MessageBox.Show("Do you want to continu?", "Save data", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                        if (result == DialogResult.Yes)
+                        {
+                            
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: " + ex.Message, "Save data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
+
+
+
+        ///////////////////////////////////////timer1 Tick//////////////////////////////////////////////
         private void timer1_Tick(object sender, EventArgs e)
         {
             CurrentTimeLabel.Text = DateTime.Now.ToString("hh:mm:ss tt");
@@ -554,7 +633,5 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 e.Cancel = false;
             }
         }
-
-
     }
 }
