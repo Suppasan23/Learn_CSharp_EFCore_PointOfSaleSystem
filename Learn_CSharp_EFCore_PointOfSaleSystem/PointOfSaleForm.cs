@@ -113,7 +113,6 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     QuantityUpDown.Value = 0;
                     TotalAmountTextBox.Clear();
                     TenderedTextBox.Clear();
-                    TenderedTextBox.ForeColor = Color.Black;
                     ChangeTextBox.Clear();
                     SaveButton.Enabled = false;
                     SaveButton.BackColor = Color.DarkGray;
@@ -452,6 +451,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             }
             finally
             {
+                calculateTenderedAndChange(-1);
                 calculateTotalAmount();
                 BarcodeTextBox.Clear();
                 BarcodeTextBox.Focus();
@@ -461,41 +461,59 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         ///////////////////////////////////////Tendered Keydown///////////////////////////////////////
         private void TenderedTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if ((e.KeyCode == Keys.Enter) && (!string.IsNullOrWhiteSpace(TenderedTextBox.Text)))
+            if (e.KeyCode == Keys.Enter)
             {
-                //Disable Windows Sound
-                e.SuppressKeyPress = true;
-
-                if (double.TryParse(TenderedTextBox.Text.Trim(), out double tenderedMoney) &&
-                    double.TryParse(TotalAmountTextBox.Text.Trim(), out double totalAmount))
+                if ((!string.IsNullOrEmpty(TotalAmountTextBox.Text)) && (!string.IsNullOrEmpty(TenderedTextBox.Text)))
                 {
-                    if (tenderedMoney >= totalAmount)
+                    if (double.TryParse(TotalAmountTextBox.Text.Trim(), out double totalAmount) && double.TryParse(TenderedTextBox.Text.Trim(), out double tenderedMoney))
                     {
-                        TenderedTextBox.ForeColor = Color.Green;
-                        TenderedTextBox.Text = tenderedMoney.ToString("##,##0.00");
-                        ChangeTextBox.Text = (tenderedMoney - totalAmount).ToString("##,##0.00");
-                        SaveButton.Enabled = true;
-                        SaveButton.BackColor = Color.LimeGreen;
+                        if(tenderedMoney >= totalAmount)
+                        {
+                            //Disable Windows Sound
+                            e.SuppressKeyPress = true;
+
+                            calculateTenderedAndChange(tenderedMoney - totalAmount);
+                        }
+                        else
+                        {
+                            calculateTenderedAndChange(-1);
+                            return;
+                        }
                     }
                     else
                     {
-                        TenderedTextBox.ForeColor = Color.Red;
-                        TenderedTextBox.Text = tenderedMoney.ToString("##,##0.00");
-                        ChangeTextBox.Clear();
-                        SaveButton.Enabled = false;
-                        SaveButton.BackColor = Color.DarkGray;
+                        calculateTenderedAndChange(-1);
+                        return;
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Input not correct", "Tendered and Change", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    calculateTenderedAndChange(-1);
+                    return;
                 }
             }
             else
             {
                 return;
             }
+        }
 
+        ///////////////////////////////////////Show tendered and change///////////////////////////////////////
+        private void calculateTenderedAndChange(double changeMoney)
+        {
+            if(changeMoney >= 0)
+            {
+                ChangeTextBox.Text = (changeMoney).ToString("##,##0.00");
+                SaveButton.Enabled = true;
+                SaveButton.BackColor = Color.LimeGreen;
+            }
+            else
+            {
+                TenderedTextBox.Clear();
+                ChangeTextBox.Clear();
+                SaveButton.Enabled = false;
+                SaveButton.BackColor = Color.DarkGray;
+            }
         }
 
         ///////////////////////////////////////timer1 Tick///////////////////////////////////////
