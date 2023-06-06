@@ -132,8 +132,6 @@
             KeywordTextBox.Name = "KeywordTextBox";
             KeywordTextBox.Size = new Size(494, 33);
             KeywordTextBox.TabIndex = 0;
-            KeywordTextBox.TextChanged += KeywordTextBox_TextChanged;
-            KeywordTextBox.DoubleClick += KeywordTextBox_DoubleClick;
             KeywordTextBox.KeyDown += KeywordTextBox_KeyDown;
             // 
             // AddNewButton
@@ -209,9 +207,7 @@
             DataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DataGridView1.Size = new Size(1028, 512);
             DataGridView1.TabIndex = 3;
-            DataGridView1.CellClick += DataGridView1_CellClick;
-            DataGridView1.KeyDown += DataGridView1_KeyDown;
-            DataGridView1.KeyUp += DataGridView1_KeyUp;
+            DataGridView1.SelectionChanged += DataGridView1_SelectionChanged;
             // 
             // ProductIDTextBox
             // 

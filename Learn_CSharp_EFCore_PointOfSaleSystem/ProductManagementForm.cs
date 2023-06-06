@@ -47,14 +47,13 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         private void ProductManagementForm_Load(object sender, EventArgs e)
         {
             loadData("");
-            HandleCellClick(1);
+            DataGridView1.ClearSelection(); //Selected no row
+            DataGridView1.Rows[0].Selected = true; //Selected first row
         }
 
         ///////////////////////////////////////////// Load Data /////////////////////////////////////////////
         private void loadData(string strKeyword)
         {
-
-
             var data = from i in db.Products
                        where i.ProductBarcode.Contains(strKeyword) || i.ProductName.Contains(strKeyword)
                        select new
@@ -86,73 +85,49 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         }
 
 
-        ///////////////////////////////////////////// GataGridView Cell Click , Key up , Key down  /////////////////////////////////////////////
-
-        private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        ///////////////////////////////////////////// GataGridView Cell SelectChange , Key up , Key down  /////////////////////////////////////////////
+        private void DataGridView1_SelectionChanged(object sender, EventArgs e)
         {
-            HandleCellClick(Convert.ToInt32(DataGridView1.SelectedRows[0].Cells[0].Value));
+            if (DataGridView1.Rows.Count > 0 && DataGridView1.SelectedRows.Count > 0)
+            {
+                DataGridViewRow selectedRow = DataGridView1.SelectedRows[0];
+                HandleCellSelectChange(selectedRow);
+            }
+            else
+            {
+                ProductIDTextBox.Clear();
+                BarcodeTextBox.Clear();
+                ProductNameTextBox.Clear();
+                CostPriceTextBox.Clear();
+                SellingPriceTextBox.Clear();
+                UnitInStockTextBox.Clear();
+                ReorderLevelTextBox.Clear();
+                CategoryNameTextBox.Clear();
+                UnitNameTextBox.Clear();
+                NoteTextBox.Clear();
+            }
         }
 
-        private void DataGridView1_KeyDown(object sender, KeyEventArgs e)
+        private void HandleCellSelectChange(DataGridViewRow receiveSelectedRow)
         {
-            HandleCellClick(Convert.ToInt32(DataGridView1.SelectedRows[0].Cells[0].Value));
-        }
-
-        private void DataGridView1_KeyUp(object sender, KeyEventArgs e)
-        {
-            HandleCellClick(Convert.ToInt32(DataGridView1.SelectedRows[0].Cells[0].Value));
-        }
-
-        private void HandleCellClick(int receiveID)
-        {
-            int selectedID = receiveID;
             try
             {
-                if (selectedID > 0)
-                {
-                    foreach (DataGridViewRow row in DataGridView1.Rows)
-                    {
-                        if (Convert.ToInt32(row.Cells[0].Value) == selectedID)
-                        {
-                            DataGridView1.ClearSelection();
-                            row.Selected = true;
-                            break;
-                        }
-                    }
-
-                    var m = (from i in db.Products
-                             where i.ProductId == selectedID
-                             select i).FirstOrDefault();
-
-                    if (m != null)
-                    {
-                        ProductIDTextBox.Text = Convert.ToString(m.ProductId);
-                        BarcodeTextBox.Text = Convert.ToString(m.ProductBarcode);
-                        ProductNameTextBox.Text = Convert.ToString(m.ProductName);
-                        CostPriceTextBox.Text = m.CostPrice != null ? m.CostPrice.Value.ToString("#,###,##0", System.Globalization.CultureInfo.InvariantCulture) : "";
-                        SellingPriceTextBox.Text = m.SellingPrice != null ? m.SellingPrice.Value.ToString("#,###,##0", System.Globalization.CultureInfo.InvariantCulture) : "";
-                        UnitInStockTextBox.Text = Convert.ToString(m.UnitInStock);
-                        ReorderLevelTextBox.Text = Convert.ToString(m.ReoderLevel);
-                        CategoryNameTextBox.Text = Convert.ToString(m.CategoryName);
-                        UnitNameTextBox.Text = Convert.ToString(m.UnitName);
-                        NoteTextBox.Text = Convert.ToString(m.Note);
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-                else
-                {
-                    return;
-                }
+                ProductIDTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[0].Value);
+                BarcodeTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[1].Value);
+                ProductNameTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[2].Value);
+                CostPriceTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[3].Value);
+                SellingPriceTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[4].Value);
+                UnitInStockTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[5].Value);
+                ReorderLevelTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[6].Value);
+                CategoryNameTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[7].Value);
+                UnitNameTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[8].Value);
+                NoteTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[9].Value);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message, "DataGridView Selection Changed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         ///////////////////////////////////////////// Refresh Button //////////////////////////////////////////////////
         private void RefreshButton_Click(object sender, EventArgs e)
@@ -161,13 +136,16 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             AddNewButton.Text = "Add New";
             DataGridView1.Enabled = true;
             loadData("");
-            HandleCellClick(1);
+            DataGridView1.ClearSelection(); //Selected no row
+            DataGridView1.Rows[0].Selected = true; //Selected first row
         }
 
         ///////////////////////////////////////////// Search Button //////////////////////////////////////////////////
         private void SearchButton_Click(object sender, EventArgs e)
         {
             loadData(KeywordTextBox.Text.Trim());
+            DataGridView1.ClearSelection(); //Selected no row
+            DataGridView1.Rows[0].Selected = true; //Selected first row
         }
 
         //////////////////////////////////////// Keyword Text Box Key down //////////////////////////////////////////
@@ -177,29 +155,25 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             {
                 e.SuppressKeyPress = true; //ปิดเสียง Windows
                 loadData(KeywordTextBox.Text.Trim());
+                DataGridView1.ClearSelection(); //Selected no row
+                DataGridView1.Rows[0].Selected = true; //Selected first row
             }
         }
 
-        //////////////////////////////////////// Keyword Text Box Double Click //////////////////////////////////////////
-        private void KeywordTextBox_DoubleClick(object sender, EventArgs e)
+        //////////////////////////////////////// Keyword Text Box Double SelectChange //////////////////////////////////////////
+        private void KeywordTextBox_DoubleSelectChange(object sender, EventArgs e)
         {
             KeywordTextBox.Clear();
             KeywordTextBox.Focus();
         }
 
-        ///////////////////////////////////////////// Keyword Text Box AutoComplete //////////////////////////////////////////////////
-        private void KeywordTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         ///////////////////////////////////////////// Add New ////////////////////////////////////////////////////////
         private void AddNewButton_Click(object sender, EventArgs e)
         {
-            HandleAddNewButton(AddNewButton.Text.Trim(), 1);
+            HandleAddNewButton(AddNewButton.Text.Trim());
         }
 
-        private void HandleAddNewButton(string buttonState, int comingID)
+        private void HandleAddNewButton(string buttonState)
         {
             try
             {
@@ -234,7 +208,6 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 }
                 else //(== "Cancel")
                 {
-                    int sendingID = comingID;
                     AddNewButton.Text = "Add New";
                     imagePath = Path.Combine(desiredPath, "Resources", "Oxygen-Icons.org-Oxygen-Actions-document-new.96.png");
                     BarcodeTextBox.ReadOnly = true;
@@ -244,7 +217,8 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     DeleteButton.Enabled = true;
                     KeywordTextBox.Focus();
                     loadData("");
-                    HandleCellClick(sendingID);
+                    DataGridView1.ClearSelection(); //Selected no row
+                    DataGridView1.Rows[0].Selected = true; //Selected first row
                 }
 
                 AddNewButton.Image = Image.FromFile(imagePath);
@@ -257,7 +231,6 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         }
 
 
-
         ///////////////////////////////////////////// Save Button ////////////////////////////////////////////////////////
         private void SaveButton_Click(object sender, EventArgs e)
         {
@@ -268,7 +241,6 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                 BarcodeTextBox.SelectAll();
                 return;
             }
-
 
             int pProductID;
             if (!int.TryParse(ProductIDTextBox.Text.Trim(), out pProductID))
@@ -356,7 +328,9 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                         finally
                         {
                             tr.Commit();
-                            HandleAddNewButton(AddNewButton.Text.Trim(), pProductID);
+                            loadData("");
+                            DataGridView1.ClearSelection(); //Selected no row
+                            DataGridView1.Rows[DataGridView1.Rows.Count - 1].Selected = true; //Selected last row
                         }
 
                     }
@@ -399,10 +373,12 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                             MessageBox.Show("Error: " + ex, "Editing Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         finally
-                        {
+                        {  
                             tr.Commit();
+                            int rowIndex = DataGridView1.SelectedRows[0].Index;
                             loadData("");
-                            HandleCellClick(pProductID);
+                            DataGridView1.ClearSelection(); //Selected no row
+                            DataGridView1.Rows[rowIndex].Selected = true; //Selected current row
                         }
 
                     }
@@ -413,7 +389,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
 
         }
 
-        ///////////////////////////////////////////// Save Button ////////////////////////////////////////////////////////
+        ///////////////////////////////////////////// Delete Button ////////////////////////////////////////////////////////
         private void DeleteButton_Click(object sender, EventArgs e)
         {
             int pProductID;
@@ -430,7 +406,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             if (result == DialogResult.Yes)
             {
                 using (var tr = db.Database.BeginTransaction())
-
+                {
                     try
                     {
                         var p = (from i in db.Products
@@ -441,7 +417,6 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                         {
                             db.Products.Remove(p);
                             db.SaveChanges();
-
 
                             MessageBox.Show("Delete data successfully.", "Delete data", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
@@ -454,13 +429,10 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     {
                         tr.Commit();
                         loadData("");
-                        HandleCellClick(1);
+                        DataGridView1.ClearSelection(); //Selected no row
                     }
-
+                }
             }
-
         }
-
     }
-
 }
