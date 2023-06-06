@@ -225,7 +225,6 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                     ChangeTextBox.Clear();
                     return;
                 }
-
             }
             catch (Exception ex)
             {
@@ -292,6 +291,16 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         ////////////////////////////////////////Show Product List to textBox///////////////////////////////////
         private void searchProduct(DataGridViewRow receiveSelectedRow)
         {
+            ProductIDTextBox.Clear();
+            BarcodeShowTextBox.Clear();
+            ProductNameTextBox.Clear();
+            UnitInStockTextBox.Clear();
+            SellingPriceTextBox.Clear();
+
+            QuantityUpDown.Value = 0;
+            QuantityUpDown.Enabled = false;
+            QuantityUpDown.ReadOnly = true;
+
             try
             {
                 // ID, Barcode, Product Name, UnitInStock, Selling Price, "Quantity", "Subtotal"
@@ -492,6 +501,14 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             resetTenderedAndChange(-1);
         }
 
+        ///////////////////////////////////////TenderedTextBox has change///////////////////////////////////////
+        private void TenderedTextBox_TextChanged(object sender, EventArgs e)
+        {
+            ChangeTextBox.Clear();
+            SaveButton.BackColor = Color.DarkGray;
+            SaveButton.Enabled = false;
+        }
+
         ///////////////////////////////////////Tendered Keydown///////////////////////////////////////
         private void TenderedTextBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -620,8 +637,15 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                                 saleDetail.ProductQuantity = proQuantity;
                                 saleDetail.SubTotal = proSubtotal;
 
-                                cutStock(saleDetail);
-                                db.SaleDetails.Add(saleDetail);
+                                if (cutStock(saleDetail))
+                                {
+                                    db.SaleDetails.Add(saleDetail);
+                                }
+                                else
+                                {
+                                    return;
+                                }
+
                             }
 
                             db.SaveChanges();
@@ -649,25 +673,30 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
             }
         }
 
-
-
         ///////////////////////////////////////Cut stock methode//////////////////////////////////////////////
-        private void cutStock(SaleDetail receiveSaleDetail)
+        private bool cutStock(SaleDetail receiveSaleDetail)
         {
-            var proData = (from p in db.Products
-                           where p.ProductId == receiveSaleDetail.ProductId
-                           select p).FirstOrDefault();
-            if (proData != null)
+            try
             {
-                proData.UnitInStock = proData.UnitInStock - receiveSaleDetail.ProductQuantity;
+                var proData = (from p in db.Products
+                               where p.ProductId == receiveSaleDetail.ProductId
+                               select p).FirstOrDefault();
+                if (proData != null)
+                {
+                    proData.UnitInStock = Convert.ToInt32(proData.UnitInStock - receiveSaleDetail.ProductQuantity);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return;
+                MessageBox.Show("Error: " + ex.Message, "Cut stock", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
-
         }
-
 
 
         ///////////////////////////////////////timer1 Tick//////////////////////////////////////////////

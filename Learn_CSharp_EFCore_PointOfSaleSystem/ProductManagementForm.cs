@@ -54,6 +54,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
         ///////////////////////////////////////////// Load Data /////////////////////////////////////////////
         private void loadData(string strKeyword)
         {
+            DataGridView1.DataSource = null;
             var data = from i in db.Products
                        where i.ProductBarcode.Contains(strKeyword) || i.ProductName.Contains(strKeyword)
                        select new
@@ -110,6 +111,16 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
 
         private void HandleCellSelectChange(DataGridViewRow receiveSelectedRow)
         {
+            ProductIDTextBox.Clear();
+            BarcodeTextBox.Clear();
+            ProductNameTextBox.Clear();
+            CostPriceTextBox.Clear();
+            SellingPriceTextBox.Clear();
+            UnitInStockTextBox.Clear();
+            ReorderLevelTextBox.Clear();
+            CategoryNameTextBox.Clear();
+            UnitNameTextBox.Clear();
+            NoteTextBox.Clear();
             try
             {
                 ProductIDTextBox.Text = Convert.ToString(receiveSelectedRow.Cells[0].Value);
@@ -315,6 +326,7 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
 
                             db.Products.Add(p);
                             db.SaveChanges();
+                            
 
                             pProductID = p.ProductId;
 
@@ -332,11 +344,8 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                             DataGridView1.ClearSelection(); //Selected no row
                             DataGridView1.Rows[DataGridView1.Rows.Count - 1].Selected = true; //Selected last row
                         }
-
                     }
-
                 }
-
             }
             else //EDIT DATA
             {
@@ -365,6 +374,8 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                                 p.Note = pNote;
 
                                 db.SaveChanges();
+
+
                                 MessageBox.Show("Edit has been successfully.", "Edited data", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
                         }
@@ -373,20 +384,16 @@ namespace Learn_CSharp_EFCore_PointOfSaleSystem
                             MessageBox.Show("Error: " + ex, "Editing Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         finally
-                        {  
+                        {
                             tr.Commit();
                             int rowIndex = DataGridView1.SelectedRows[0].Index;
                             loadData("");
                             DataGridView1.ClearSelection(); //Selected no row
                             DataGridView1.Rows[rowIndex].Selected = true; //Selected current row
                         }
-
                     }
-
                 }
-
             }
-
         }
 
         ///////////////////////////////////////////// Delete Button ////////////////////////////////////////////////////////

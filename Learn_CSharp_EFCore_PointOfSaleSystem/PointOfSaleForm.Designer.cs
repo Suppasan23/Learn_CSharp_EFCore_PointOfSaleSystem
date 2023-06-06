@@ -518,6 +518,7 @@
             TenderedTextBox.Size = new Size(155, 33);
             TenderedTextBox.TabIndex = 9;
             TenderedTextBox.TextAlign = HorizontalAlignment.Right;
+            TenderedTextBox.TextChanged += TenderedTextBox_TextChanged;
             TenderedTextBox.KeyDown += TenderedTextBox_KeyDown;
             // 
             // ChangeTextBox
